@@ -1,0 +1,62 @@
+.card-selection-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+  color: white;
+  padding: 40px;
+}
+
+.selection-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 50px;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cards-grid {
+  display: flex;
+  gap: 40px;
+  perspective: 1000px;
+}
+
+.selection-card {
+  width: 220px;
+  aspect-ratio: 2/3;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Hover Efekti: Kartın öne çıkması ve parlaklık */
+.selection-card:hover {
+  transform: translateY(-20px) scale(1.05);
+  box-shadow: 0 25px 50px rgba(0, 191, 255, 0.3);
+}
+
+.selection-card img {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.card-label {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #94a3b8;
+  transition: 0.3s;
+}
+
+.selection-card:hover + .card-label {
+  color: #00bfff;
+}
