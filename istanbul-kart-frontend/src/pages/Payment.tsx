@@ -1,44 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate,useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import successVideo from '../assets/success-animation.mp4';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import successVideo from "../assets/success-animation.mp4";
 
 const Payment: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation(); // location tanımlandı
-  
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   // Yükleme Tipi State'i: Eğer Dashboard'dan openAbonman geldiyse direkt true başlar!
-  const [isSubscribed, setIsSubcribed] = useState(location.state?.openAbonman || false);
-  const [cardType, setCardType] = useState('REGULAR');
+  const [isSubscribed, setIsSubcribed] = useState(
+    location.state?.openAbonman || false,
+  );
+  const [cardType, setCardType] = useState("REGULAR");
 
   // Form verileri için state'ler
-  const [amount, setAmount] = useState('');
-  const [cardHolderName, setCardHolderName] = useState('');
-  const [creditCardNumber, setCreditCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState(''); 
-  const [cvc, setCvc] = useState('');
-  const [istanbulCardNumber, setIstanbulCardNumber] = useState('');
+  const [amount, setAmount] = useState("");
+  const [cardHolderName, setCardHolderName] = useState("");
+  const [creditCardNumber, setCreditCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cvc, setCvc] = useState("");
+  const [istanbulCardNumber, setIstanbulCardNumber] = useState("");
 
   // Sayfa açıldığında kullanıcının mevcut İstanbulkart numarasını ve tipini çek
   useEffect(() => {
     const fetchUserCard = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) return;
 
       try {
-        const response = await fetch('http://localhost:8080/api/cards/my-card', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const response = await fetch(
+          "http://localhost:8080/api/cards/my-card",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
 
         if (response.ok) {
           const data = await response.json();
           if (data.exists && data.cardNumber) {
             setIstanbulCardNumber(data.cardNumber);
-            // Backend'den cardType dönüyorsa onu kaydet (Örn: 'STUDENT' veya 'REGULAR')
-            if (data.cardType) setCardType(data.cardType); 
+            if (data.cardType) setCardType(data.cardType);
           }
         }
       } catch (error) {
@@ -50,11 +54,12 @@ const Payment: React.FC = () => {
   }, []);
 
   // Abonman fiyatını dinamik hesapla
-  const abonmanPrice = (cardType === 'STUDENT' || cardType === 'ÖĞRENCİ') ? 150 : 300;
+  const abonmanPrice =
+    cardType === "STUDENT" || cardType === "ÖĞRENCİ" ? 150 : 300;
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!istanbulCardNumber) {
       alert("Yükleme yapılacak aktif bir İstanbulkart bulunamadı!");
       return;
@@ -64,47 +69,47 @@ const Payment: React.FC = () => {
     const finalAmount = isSubscribed ? abonmanPrice : parseFloat(amount);
 
     if (!isSubscribed && (isNaN(finalAmount) || finalAmount <= 0)) {
-        alert("Lütfen geçerli bir tutar giriniz.");
-        return;
+      alert("Lütfen geçerli bir tutar giriniz.");
+      return;
     }
 
     setIsProcessing(true);
-    const [expireMonth, expireYear] = expiryDate.split('/');
+    const [expireMonth, expireYear] = expiryDate.split("/");
 
     const paymentData = {
       cardNumber: istanbulCardNumber,
-      amount: finalAmount, 
-      isSubscription: isSubscribed, 
-      
+      amount: finalAmount,
+      subscription: isSubscribed,
       cardHolderName: cardHolderName,
       creditCardNumber: creditCardNumber,
-      expireMonth: expireMonth ? expireMonth.trim() : '',
-      expireYear: expireYear ? `20${expireYear.trim()}` : '',
-      cvc: cvc
+      expireMonth: expireMonth,
+      expireYear: expireYear,
+      cvc: cvc,
     };
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8080/api/payment/topup', { 
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8080/api/payment/topup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(paymentData)
+        body: JSON.stringify(paymentData),
       });
 
       if (response.ok) {
         setIsProcessing(false);
-        setIsSuccess(true); 
+        setIsSuccess(true);
 
         setTimeout(() => {
-          navigate('/dashboard'); 
+          navigate("/dashboard");
+          window.location.reload();
         }, 3000);
       } else {
         const errorData = await response.text();
         console.error("Backend hata detayı:", errorData);
-        alert(`Ödeme başarısız: ${errorData || 'Bilinmeyen hata'}`);
+        alert(`Ödeme başarısız: ${errorData || "Bilinmeyen hata"}`);
         setIsProcessing(false);
       }
     } catch (error) {
@@ -118,14 +123,7 @@ const Payment: React.FC = () => {
       <div className="payment-page">
         {isSuccess ? (
           <SuccessContainer>
-            <video 
-              width="256" 
-              height="256" 
-              autoPlay 
-              loop 
-              muted 
-              playsInline
-            >
+            <video width="256" height="256" autoPlay loop muted playsInline>
               <source src={successVideo} type="video/mp4" />
             </video>
             <h2>Payment Successful! Redirecting...</h2>
@@ -133,93 +131,110 @@ const Payment: React.FC = () => {
         ) : (
           <section className="add-card page">
             <form className="form" onSubmit={handlePayment}>
-              
               <div className="secure-header">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  width="28" height="28" 
-                  viewBox="0 0 24 24" 
-                  fill="#10b981" 
-                  stroke="white" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="#10b981"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
-                  style={{ marginRight: '8px' }}
+                  style={{ marginRight: "8px" }}
                 >
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
                 <h2>Secure Payment</h2>
               </div>
 
               {/* YÜKLEME TİPİ SEÇİCİSİ EKLENDİ */}
               <div className="payment-type-toggle">
-                <label className={`toggle-option ${!isSubscribed ? 'active' : ''}`}>
-                  <input type="radio" checked={!isSubscribed} onChange={() => setIsSubcribed(false)} />
+                <label
+                  className={`toggle-option ${!isSubscribed ? "active" : ""}`}
+                >
+                  <input
+                    type="radio"
+                    checked={!isSubscribed}
+                    onChange={() => setIsSubcribed(false)}
+                  />
                   Transfer
                 </label>
-                <label className={`toggle-option ${isSubscribed ? 'active' : ''}`}>
-                  <input type="radio" checked={isSubscribed} onChange={() => setIsSubcribed(true)} />
+                <label
+                  className={`toggle-option ${isSubscribed ? "active" : ""}`}
+                >
+                  <input
+                    type="radio"
+                    checked={isSubscribed}
+                    onChange={() => setIsSubcribed(true)}
+                  />
                   Subscription
                 </label>
               </div>
 
               <label className="label">
-                <span className="title">{isSubscribed ? "Abonman Tutarı (TL)" : "Amount to Load (TL)"}</span>
-                <input 
-                  className="input-field amount-input" 
-                  type={isSubscribed ? "text" : "number"} 
-                  placeholder="E.g: 100" 
+                <span className="title">
+                  {isSubscribed ? "Abonman Tutarı (TL)" : "Amount to Load (TL)"}
+                </span>
+                <input
+                  className="input-field amount-input"
+                  type={isSubscribed ? "text" : "number"}
+                  placeholder="E.g: 100"
                   value={isSubscribed ? abonmanPrice : amount}
                   onChange={(e) => !isSubscribed && setAmount(e.target.value)}
                   disabled={isSubscribed} // Abonman ise elle girmeyi engelle
-                  style={{ cursor: isSubscribed ? 'not-allowed' : 'text', opacity: isSubscribed ? 0.8 : 1 }}
+                  style={{
+                    cursor: isSubscribed ? "not-allowed" : "text",
+                    opacity: isSubscribed ? 0.8 : 1,
+                  }}
                   required
                 />
               </label>
 
               <label className="label">
                 <span className="title">Name</span>
-                <input 
-                  className="input-field" 
-                  type="text" 
-                  placeholder="Ad Soyad" 
+                <input
+                  className="input-field"
+                  type="text"
+                  placeholder="Ad Soyad"
                   value={cardHolderName}
                   onChange={(e) => setCardHolderName(e.target.value)}
                   required
                 />
               </label>
-              
+
               <label className="label">
                 <span className="title">Credit Card Number</span>
-                <input 
-                  className="input-field" 
-                  type="text" 
-                  placeholder="0000 0000 0000 0000" 
+                <input
+                  className="input-field"
+                  type="text"
+                  placeholder="0000 0000 0000 0000"
                   value={creditCardNumber}
                   onChange={(e) => setCreditCardNumber(e.target.value)}
                   required
                 />
               </label>
-              
+
               <div className="split">
                 <label className="label">
                   <span className="title">Expiry Date (MM/YY)</span>
-                  <input 
-                    className="input-field" 
-                    type="text" 
-                    placeholder="MM/YY (Örn: 06/28)" 
+                  <input
+                    className="input-field"
+                    type="text"
+                    placeholder="MM/YY (Örn: 06/28)"
                     value={expiryDate}
                     onChange={(e) => setExpiryDate(e.target.value)}
                     required
                   />
                 </label>
-                
+
                 <label className="label">
                   <span className="title">CVV</span>
-                  <input 
-                    className="input-field" 
-                    type="number" 
-                    placeholder="123" 
+                  <input
+                    className="input-field"
+                    type="number"
+                    placeholder="123"
                     value={cvc}
                     onChange={(e) => setCvc(e.target.value)}
                     required
@@ -228,7 +243,17 @@ const Payment: React.FC = () => {
               </div>
 
               <div className="btn-container-wrapper">
-                <button type="submit" className="container" disabled={isProcessing} style={{ border: 'none', background: 'none', padding: 0, width: '100%' }}>
+                <button
+                  type="submit"
+                  className="container"
+                  disabled={isProcessing}
+                  style={{
+                    border: "none",
+                    background: "none",
+                    padding: 0,
+                    width: "100%",
+                  }}
+                >
                   <div className="left-side">
                     <div className="card">
                       <div className="card-line" />
@@ -244,14 +269,24 @@ const Payment: React.FC = () => {
                     </div>
                   </div>
                   <div className="right-side">
-                    <div className="new">{isProcessing ? 'Processing...' : 'Checkout'}</div>
-                    <svg className="arrow" xmlns="http://www.w3.org/2000/svg" width={512} height={512} viewBox="0 0 451.846 451.847">
-                      <path d="M345.441 248.292L151.154 442.573c-12.359 12.365-32.397 12.365-44.75 0-12.354-12.354-12.354-32.391 0-44.744L278.318 225.92 106.409 54.017c-12.354-12.359-12.354-32.394 0-44.748 12.354-12.359 32.391-12.359 44.75 0l194.287 194.284c6.177 6.18 9.262 14.271 9.262 22.366 0 8.099-3.091 16.196-9.267 22.373z" fill="#a1a1ff" />
+                    <div className="new">
+                      {isProcessing ? "Processing..." : "Checkout"}
+                    </div>
+                    <svg
+                      className="arrow"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={512}
+                      height={512}
+                      viewBox="0 0 451.846 451.847"
+                    >
+                      <path
+                        d="M345.441 248.292L151.154 442.573c-12.359 12.365-32.397 12.365-44.75 0-12.354-12.354-12.354-32.391 0-44.744L278.318 225.92 106.409 54.017c-12.354-12.359-12.354-32.394 0-44.748 12.354-12.359 32.391-12.359 44.75 0l194.287 194.284c6.177 6.18 9.262 14.271 9.262 22.366 0 8.099-3.091 16.196-9.267 22.373z"
+                        fill="#a1a1ff"
+                      />
                     </svg>
                   </div>
                 </button>
               </div>
-
             </form>
           </section>
         )}
@@ -270,11 +305,11 @@ const SuccessContainer = styled.div`
   padding: 50px;
   border-radius: 25px;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 
   h2 {
     color: #10b981;
-    font-family: 'Arial', sans-serif;
+    font-family: "Arial", sans-serif;
     font-size: 1.5rem;
     margin: 0;
   }
@@ -288,15 +323,18 @@ const StyledWrapper = styled.div`
     justify-content: center;
     align-items: center;
     padding: 20px;
-    font-family: 'Arial', sans-serif;
+    font-family: "Arial", sans-serif;
   }
 
   .form {
     background: #0c0f14;
-    box-shadow: 0px 187px 75px rgba(0, 0, 0, 0.01),
-      0px 105px 63px rgba(0, 0, 0, 0.05), 0px 47px 47px rgba(0, 0, 0, 0.09),
-      0px 12px 26px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
-    width: 480px; 
+    box-shadow:
+      0px 187px 75px rgba(0, 0, 0, 0.01),
+      0px 105px 63px rgba(0, 0, 0, 0.05),
+      0px 47px 47px rgba(0, 0, 0, 0.09),
+      0px 12px 26px rgba(0, 0, 0, 0.1),
+      0px 0px 0px rgba(0, 0, 0, 0.1);
+    width: 480px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -313,7 +351,7 @@ const StyledWrapper = styled.div`
     gap: 10px;
     margin-bottom: 10px;
     color: #10b981;
-    
+
     h2 {
       font-size: 1.2rem;
       margin: 0;
@@ -341,7 +379,7 @@ const StyledWrapper = styled.div`
     font-size: 14px;
     font-weight: 600;
     transition: all 0.3s ease;
-    
+
     input {
       display: none;
     }
@@ -358,13 +396,13 @@ const StyledWrapper = styled.div`
     flex-direction: column;
     gap: 5px;
   }
-  
+
   .form .label:has(input:focus) .title {
     top: 0;
     left: 0;
     color: #3b82f6;
   }
-  
+
   .form .label .title {
     padding: 0 10px;
     transition: all 300ms;
@@ -377,7 +415,7 @@ const StyledWrapper = styled.div`
     left: 15px;
     background: #0c0f14;
   }
-  
+
   .form .input-field {
     width: 100%;
     height: 50px;
@@ -407,7 +445,7 @@ const StyledWrapper = styled.div`
   .form .input-field:focus:not(:disabled) {
     border-color: #3b82f6;
   }
-  
+
   .form .split {
     display: flex;
     flex-direction: row;
@@ -415,7 +453,7 @@ const StyledWrapper = styled.div`
     width: 100%;
     gap: 15px;
   }
-  
+
   .form .split label {
     width: 100%;
   }
@@ -429,7 +467,7 @@ const StyledWrapper = styled.div`
   .container {
     background-color: #1e1e2f;
     display: flex;
-    width: 100%; 
+    width: 100%;
     height: 70px;
     position: relative;
     border-radius: 15px;
@@ -537,10 +575,18 @@ const StyledWrapper = styled.div`
   }
 
   @keyframes slide-top {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-50px) rotate(90deg); }
-    60% { transform: translateY(-50px) rotate(90deg); }
-    100% { transform: translateY(-6px) rotate(90deg); }
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-50px) rotate(90deg);
+    }
+    60% {
+      transform: translateY(-50px) rotate(90deg);
+    }
+    100% {
+      transform: translateY(-6px) rotate(90deg);
+    }
   }
 
   .post {
@@ -613,8 +659,12 @@ const StyledWrapper = styled.div`
   }
 
   @keyframes slide-post {
-    50% { transform: translateY(0); }
-    100% { transform: translateY(-50px); }
+    50% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50px);
+    }
   }
 
   .dollar {

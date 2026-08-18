@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface LoginFormProps {
@@ -10,6 +10,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  // --- KÖKTEN ÇÖZÜM BURASI ---
+  // Kullanıcı giriş ekranına geldiği an eski hafızayı sıfırlıyoruz!
+  useEffect(() => {
+    localStorage.removeItem('token');
+  }, []);
+  // ---------------------------
+
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -20,11 +27,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
       });
 
       if (response.ok) {
-        // 1. Yanıtı metin olarak alıyoruz (Artık herkes görebilir)
         const resultText = await response.text(); 
-        let tokenToSave = resultText; // Varsayılan olarak direkt metni token sayalım
+        let tokenToSave = resultText; 
 
-        // 2. Acaba JSON formatında mı gelmiş diye kontrol edelim
         try {
           const data = JSON.parse(resultText);
           if (data.token) tokenToSave = data.token;

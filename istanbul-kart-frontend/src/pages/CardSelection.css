@@ -60,3 +60,34 @@
 .selection-card:hover + .card-label {
   color: #00bfff;
 }
+.yellow-glow .selection-card {
+  box-shadow: 0 10px 30px rgba(255, 204, 0, 0.4);
+}
+.yellow-glow:hover .selection-card {
+  box-shadow: 0 15px 45px rgba(255, 204, 0, 0.7);
+  transform: translateY(-5px); /* Üzerine gelince hafif yukarı kalkar */
+}
+
+/* KIRMIZI (Regular) Kart Yansıması */
+.red-glow .selection-card {
+  box-shadow: 0 10px 30px rgba(220, 20, 60, 0.4);
+}
+.red-glow:hover .selection-card {
+  box-shadow: 0 15px 45px rgba(220, 20, 60, 0.7);
+  transform: translateY(-5px);
+}
+
+/* YEŞİL (Student) Kart Yansıması */
+.green-glow .selection-card {
+  box-shadow: 0 10px 30px rgba(46, 204, 113, 0.4);
+}
+.green-glow:hover .selection-card {
+  box-shadow: 0 15px 45px rgba(46, 204, 113, 0.7);
+  transform: translateY(-5px);
+}
+
+
+.selection-card {
+  transition: all 0.3s ease;
+  border-radius: 16px; 
+}

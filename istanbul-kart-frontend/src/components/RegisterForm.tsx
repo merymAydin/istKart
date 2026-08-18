@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
+// useNavigate'i kaldırdık çünkü artık kayıttan sonra Dashboard'a değil, Login'e geçeceğiz.
 interface RegisterFormProps {
   setIsLogin: (val: boolean) => void;
 }
@@ -9,7 +9,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ setIsLogin }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Artık güvenle kullanabiliriz
+
+  // Sayfa yüklendiği an eski token'ı acımadan siliyoruz!
+  useEffect(() => {
+    localStorage.removeItem('token');
+  }, []);
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,26 +31,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ setIsLogin }) => {
       });
 
       if (response.ok) {
-        const resultText = await response.text();
-        let tokenToSave = resultText;
-
-        try {
-          const data = JSON.parse(resultText);
-          if (data.token) tokenToSave = data.token;
-          else if (data.accessToken) tokenToSave = data.accessToken;
-        } catch {
-          // Düz metin token
-        }
-
-        if (tokenToSave) {
-          localStorage.setItem('token', tokenToSave);
-        }
-
+        // --- HATANIN ÇÖZÜLDÜĞÜ YER ---
+        // Artık backend'den dönen o "Kayıt başarılı" metnini token olarak KAYDETMİYORUZ!
+        // Sadece kullanıcıya bilgi verip, Login formuna geçmesini sağlıyoruz.
         console.log("Registration successful!");
-        alert("Registration successful! Welcome.");
+        alert("Registration successful! Please log in to continue.");
         
-        // KESİN YÖNLENDİRME: Dashboard'a atıyoruz!
-        navigate('/dashboard');
+        // Kullanıcıyı direkt Login (Sign In) ekranına kaydırıyoruz.
+        setIsLogin(true);
       } else {
         const errorText = await response.text();
         alert("Registration failed: " + errorText);

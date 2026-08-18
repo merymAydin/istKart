@@ -51,17 +51,19 @@ const CardSelection = () => {
       <h1 className="selection-title">You are...</h1>
       
       <div className="cards-grid">
-        <div className="card-wrapper" onClick={() => handleCardCreation('ELDERLY')} style={{ cursor: 'pointer' }}>
+        <div className="card-wrapper yellow-glow" onClick={() => handleCardCreation('ELDERLY')} style={{ cursor: 'pointer' }}>
           <div className="selection-card"><img src={yellowCard} alt="Elderly" /></div>
           <p className="card-label">Elderly</p>
         </div>
 
-        <div className="card-wrapper" onClick={() => handleCardCreation('REGULAR')} style={{ cursor: 'pointer' }}>
+
+        <div className="card-wrapper red-glow" onClick={() => handleCardCreation('REGULAR')} style={{ cursor: 'pointer' }}>
           <div className="selection-card"><img src={redCard} alt="Regular" /></div>
           <p className="card-label">Regular</p>
         </div>
 
-        <div className="card-wrapper" onClick={() => handleCardCreation('STUDENT')} style={{ cursor: 'pointer' }}>
+
+        <div className="card-wrapper green-glow" onClick={() => handleCardCreation('STUDENT')} style={{ cursor: 'pointer' }}>
           <div className="selection-card"><img src={greenCard} alt="Student" /></div>
           <p className="card-label">Student</p>
         </div>
