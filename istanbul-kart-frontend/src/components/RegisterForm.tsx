@@ -31,13 +31,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ setIsLogin }) => {
       });
 
       if (response.ok) {
-        // --- HATANIN ÇÖZÜLDÜĞÜ YER ---
-        // Artık backend'den dönen o "Kayıt başarılı" metnini token olarak KAYDETMİYORUZ!
-        // Sadece kullanıcıya bilgi verip, Login formuna geçmesini sağlıyoruz.
+
         console.log("Registration successful!");
         alert("Registration successful! Please log in to continue.");
-        
-        // Kullanıcıyı direkt Login (Sign In) ekranına kaydırıyoruz.
         setIsLogin(true);
       } else {
         const errorText = await response.text();

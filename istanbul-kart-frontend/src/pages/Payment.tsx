@@ -5,18 +5,18 @@ import successVideo from "../assets/success-animation.mp4";
 
 const Payment: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // location tanımlandı
+  const location = useLocation(); 
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Yükleme Tipi State'i: Eğer Dashboard'dan openAbonman geldiyse direkt true başlar!
+  
   const [isSubscribed, setIsSubcribed] = useState(
     location.state?.openAbonman || false,
   );
   const [cardType, setCardType] = useState("REGULAR");
 
-  // Form verileri için state'ler
+  
   const [amount, setAmount] = useState("");
   const [cardHolderName, setCardHolderName] = useState("");
   const [creditCardNumber, setCreditCardNumber] = useState("");
@@ -24,7 +24,7 @@ const Payment: React.FC = () => {
   const [cvc, setCvc] = useState("");
   const [istanbulCardNumber, setIstanbulCardNumber] = useState("");
 
-  // Sayfa açıldığında kullanıcının mevcut İstanbulkart numarasını ve tipini çek
+ 
   useEffect(() => {
     const fetchUserCard = async () => {
       const token = localStorage.getItem("token");
@@ -53,7 +53,7 @@ const Payment: React.FC = () => {
     fetchUserCard();
   }, []);
 
-  // Abonman fiyatını dinamik hesapla
+ 
   const abonmanPrice =
     cardType === "STUDENT" || cardType === "ÖĞRENCİ" ? 150 : 300;
 
@@ -64,12 +64,11 @@ const Payment: React.FC = () => {
       alert("Yükleme yapılacak aktif bir İstanbulkart bulunamadı!");
       return;
     }
-
-    // Backend'e gidecek kesin tutarı belirle
+ 
     const finalAmount = isSubscribed ? abonmanPrice : parseFloat(amount);
 
     if (!isSubscribed && (isNaN(finalAmount) || finalAmount <= 0)) {
-      alert("Lütfen geçerli bir tutar giriniz.");
+      alert("Please enter valid amount");
       return;
     }
 
@@ -109,7 +108,7 @@ const Payment: React.FC = () => {
       } else {
         const errorData = await response.text();
         console.error("Backend hata detayı:", errorData);
-        alert(`Ödeme başarısız: ${errorData || "Bilinmeyen hata"}`);
+        alert(`Payment failed: ${errorData || "Bilinmeyen hata"}`);
         setIsProcessing(false);
       }
     } catch (error) {
@@ -149,7 +148,7 @@ const Payment: React.FC = () => {
                 <h2>Secure Payment</h2>
               </div>
 
-              {/* YÜKLEME TİPİ SEÇİCİSİ EKLENDİ */}
+               
               <div className="payment-type-toggle">
                 <label
                   className={`toggle-option ${!isSubscribed ? "active" : ""}`}
@@ -359,7 +358,6 @@ const StyledWrapper = styled.div`
     }
   }
 
-  /* YENİ EKLENEN TOGGLE CSS'İ */
   .payment-type-toggle {
     display: flex;
     gap: 10px;

@@ -1,72 +1,102 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './CardSelection.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./CardSelection.css";
 
-import yellowCard from '../assets/yellow.webp';
-import redCard from '../assets/redcard.webp';
-import greenCard from '../assets/greencard.webp';
+// 1. ESKİ (KLASİK) KART GÖRSELLERİ
+import regularCardImg from "../assets/redcard.webp";  
+import studentCardImg from "../assets/greencard.webp"; 
+import yellowCardImg from "../assets/yellow.webp"; // <-- Sarı kartı buraya ekledim
 
-const CardSelection = () => {
+// 2. YENİ EKLENEN KART GÖRSELLERİ (Senin verdiğin doğru uzantılarla)
+import plusCardImg from "../assets/plus.png";
+import facilityCardImg from "../assets/blue.webp";
+import cityCardImg from "../assets/tourist.webp";
+
+const cardOptions = [
+  // --- MEVCUT KARTLAR ---
+  { 
+    id: "NORMAL", 
+    title: "Regular Card", 
+    img: regularCardImg, 
+    glowClass: "red-glow" 
+  },
+  { 
+    id: "STUDENT", 
+    title: "Student Card", 
+    img: studentCardImg, 
+    glowClass: "green-glow" 
+  },
+  { 
+    id: "YELLOW", 
+    title: "Yellow Card", 
+    img: yellowCardImg, 
+    glowClass: "yellow-glow" 
+  },
+  // --- YENİ EKLENEN KARTLAR ---
+  { 
+    id: "PLUS", 
+    title: "Istanbul Plus", 
+    img: plusCardImg, 
+    glowClass: "red-glow" // Plus kartın kırmızı/turuncu tonlarına uygun glow
+  },
+  { 
+    id: "FACILITY", 
+    title: "Public Facilities (Blue)", 
+    img: facilityCardImg, 
+    glowClass: "blue-glow" 
+  },
+  { 
+    id: "CITY", 
+    title: "Istanbul City Card", 
+    img: cityCardImg, 
+    glowClass: "green-glow" 
+  },
+];
+
+const CardSelection: React.FC = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleCardCreation = async (cardType: string) => {
-    // 1. Select the correct backend endpoint based on the card type
-    let endpoint = 'normal';
-    if (cardType === 'STUDENT') endpoint = 'student';
-    if (cardType === 'ELDERLY') endpoint = 'elderly';
-
-    // 2. Retrieve the Bearer Token from local storage
-    const token = localStorage.getItem('token'); 
-
-    if (!token) {
-      alert("Please log in first! (Token not found)");
-      return;
-    }
-
+  const handleCardClick = async (cardId: string) => {
+    setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/api/cards/create/${endpoint}`, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
-        }
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:8080/api/cards/create?cardType=${cardId}`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
-        const resultText = await response.text();
-        console.log("Card successfully created:", resultText);
-        navigate('/dashboard');
+        navigate("/"); 
       } else {
         const errorText = await response.text();
-        alert("Backend error: " + errorText);
+        alert("Kart oluşturulamadı: " + errorText);
       }
     } catch (error) {
-      console.error("API connection error:", error);
-      alert("Error: Cannot reach the backend. Please make sure the server is running.");
+      console.error("Hata:", error);
+      alert("Sunucuya bağlanılamadı.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="card-selection-container">
-      <h1 className="selection-title">You are...</h1>
-      
+      <h1 className="selection-title">Select Your Istanbulkart</h1>
+
       <div className="cards-grid">
-        <div className="card-wrapper yellow-glow" onClick={() => handleCardCreation('ELDERLY')} style={{ cursor: 'pointer' }}>
-          <div className="selection-card"><img src={yellowCard} alt="Elderly" /></div>
-          <p className="card-label">Elderly</p>
-        </div>
-
-
-        <div className="card-wrapper red-glow" onClick={() => handleCardCreation('REGULAR')} style={{ cursor: 'pointer' }}>
-          <div className="selection-card"><img src={redCard} alt="Regular" /></div>
-          <p className="card-label">Regular</p>
-        </div>
-
-
-        <div className="card-wrapper green-glow" onClick={() => handleCardCreation('STUDENT')} style={{ cursor: 'pointer' }}>
-          <div className="selection-card"><img src={greenCard} alt="Student" /></div>
-          <p className="card-label">Student</p>
-        </div>
+        {cardOptions.map((card) => (
+          <div 
+            key={card.id} 
+            className={`card-wrapper ${card.glowClass}`}
+            onClick={() => !isLoading && handleCardClick(card.id)}
+          >
+            <div className="selection-card">
+              <img src={card.img} alt={card.title} />
+            </div>
+            <div className="card-label">{card.title}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

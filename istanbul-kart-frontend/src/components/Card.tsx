@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-interface CardProps {
+// Yeni kart görsellerini import ediyoruz (Kendi yollarına göre ayarlayabilirsin)
+import plusCardImg from '../assets/plus.png';
+import facilityCardImg from '../assets/blue.webp';
+import cityCardImg from '../assets/tourist.webp';
+
+export interface CardProps {
   balance: number;
   subscription: number;
   subscriptionExpiryDate?: string;
@@ -10,173 +15,132 @@ interface CardProps {
   userName: string;
 }
 
-// Props'lardan subscription ve expiryDate'i kullanmıyoruz çünkü artık kartta değil, mavi kutuda gösteriyoruz.
-const Card: React.FC<CardProps> = ({ balance, cardType, cardNumber, userName }) => {
-
-  const formatCardNumber = (numberStr: string) => {
-    if (!numberStr) return '**** **** **** ****';
-    const num = numberStr.padEnd(16, '*');
-    return `${num.slice(0, 4)} ${num.slice(4, 8)} ${num.slice(8, 12)} ${num.slice(12, 16)}`;
+const Card: React.FC<CardProps> = ({
+  balance,
+  cardType,
+  cardNumber,
+  userName,
+}) => {
+  const getCardImage = () => {
+    switch (cardType?.toUpperCase()) {
+      case 'PLUS':
+      case 'ISTANBUL_PLUS':
+      case 'NORMAL':
+        return plusCardImg;
+      case 'FACILITY':
+      case 'BLUE':
+      case 'PUBLIC_FACILITY':
+        return facilityCardImg;
+      case 'CITY':
+      case 'TOURIST':
+      case 'ISTANBUL_CITY_CARD':
+        return cityCardImg;
+      default:
+        return plusCardImg; 
+    }
   };
 
-  // KART ARTIK SADECE VE SADECE TL BAKİYESİNİ GÖSTERECEK
-  const displayTitle = 'GÜNCEL BAKIYE';
-  const displayValue = `₺${balance.toFixed(2)}`;
-
   return (
-    <StyledWrapper $cardType={cardType}>
-      <div className="flip-card">
-        <div className="flip-card-inner">
-          
-          <div className="flip-card-front">
-            <p className="heading_8264">ISTANBULKART</p>
-            
-            <svg 
-              className="contactless" 
-              width="36" 
-              height="36" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="white" 
-              strokeWidth="2.5" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-              style={{ transform: 'rotate(90deg)' }}
-            >
-              <path d="M12 20h.01"/>
-              <path d="M2 8.82a15 15 0 0 1 20 0"/>
-              <path d="M5 12.859a10 10 0 0 1 14 0"/>
-              <path d="M8.5 16.429a5 5 0 0 1 7 0"/>
-            </svg>
-
-            <div className="balance-info">
-              <p className="balance-title">{displayTitle}</p>
-              <p className="balance-value">{displayValue}</p>
-            </div>
-
-            <p className="number">{formatCardNumber(cardNumber)}</p>
-            <p className="name">{userName}</p>
+    <CardContainer>
+      <img src={getCardImage()} alt="Istanbulkart Design" className="card-bg-img" />
+      <div className="card-content">
+        <div className="card-header">
+          <span>İSTANBULKART</span>
+          <span className="card-type-badge">{cardType || 'PLUS'}</span>
+        </div>
+        <div className="card-middle">
+          <p className="balance-label">GÜNCEL BAKİYE</p>
+          <h2 className="balance-amount">₺{balance.toFixed(2)}</h2>
+        </div>
+        <div className="card-footer">
+          <div className="card-number">
+            {cardNumber ? cardNumber.match(/.{1,4}/g)?.join(' ') : '•••• •••• •••• ••••'}
           </div>
-
-          <div className="flip-card-back"></div>
-
+          {/* Sadece senin ismini dinamik olarak büyük harflerle yazdırır */}
+          <div className="card-holder">{userName ? userName.toUpperCase() : 'MERYEM AYDIN'}</div>
         </div>
       </div>
-    </StyledWrapper>
+    </CardContainer>
   );
-}
-
-const getColors = (type: string) => {
-  switch (type) {
-    case 'STUDENT': 
-      return { bg: 'linear-gradient(135deg, #2563eb, #1e3a8a)' };
-    case 'ELDERLY': 
-      return { bg: 'linear-gradient(135deg, #7c3aed, #4c1d95)' };
-    case 'NORMAL': 
-    default:
-      return { bg: 'linear-gradient(135deg, #dc2626, #7f1d1d)' };
-  }
 };
 
-const StyledWrapper = styled.div<{ $cardType: string }>`
-  .flip-card {
-    background-color: transparent;
-    width: 370px;  
-    height: 230px; 
-    perspective: 1000px;
-    color: white;
-    font-family: 'Arial', sans-serif;
-  }
+const CardContainer = styled.div`
+  width: 320px;
+  height: 200px;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  font-family: 'Arial', sans-serif;
 
-  .balance-info {
+  .card-bg-img {
     position: absolute;
-    top: 2.5em; 
-    left: 1.8em;
-  }
-
-  .number {
-    position: absolute;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: bold;
-    font-size: 1.4em; 
-    letter-spacing: 2px;
-    bottom: 3.5em;
-    left: 1.2em;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-  }
-
-  .name {
-    position: absolute;
-    font-weight: bold;
-    font-size: 0.9em;
-    letter-spacing: 0.1em;
-    bottom: 1.5em;
-    left: 1.8em;
-    text-transform: uppercase;
-  }
-
-  .heading_8264 {
-    position: absolute;
-    letter-spacing: .15em;
-    font-size: 0.7em;
-    font-weight: bold;
-    top: 1.5em;
-    right: 1.5em;
-    opacity: 0.8;
-  }
-
-  .contactless {
-    position: absolute;
-    top: 4.5em;
-    right: 1.8em;
-    opacity: 0.85;
-  }
-
-  .balance-title {
-    font-size: 0.6em;
-    letter-spacing: 0.1em;
-    opacity: 0.8;
-    margin: 0 0 5px 0;
-  }
-
-  .balance-value {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin: 0;
-    text-shadow: 0px 2px 4px rgba(0,0,0,0.3);
-  }
-
-  .flip-card-inner {
-    position: relative;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-style: preserve-3d;
+    object-fit: cover;
+    z-index: 1;
   }
 
-  .flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
-  }
-
-  .flip-card-front, .flip-card-back {
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-    position: absolute;
+  .card-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: 16px; 
-  }
+    justify-content: space-between;
+    color: #ffffff;
+    box-sizing: border-box;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 
-  .flip-card-front {
-    background: ${({ $cardType }) => getColors($cardType).bg};
-  }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 1px;
 
-  .flip-card-back {
-    background: ${({ $cardType }) => getColors($cardType).bg};
-    transform: rotateY(180deg);
+      .card-type-badge {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+      }
+    }
+
+    .card-middle {
+      .balance-label {
+        font-size: 10px;
+        margin: 0;
+        opacity: 0.8;
+      }
+      .balance-amount {
+        font-size: 24px;
+        margin: 2px 0 0 0;
+        font-weight: bold;
+      }
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+
+      .card-number {
+        font-size: 13px;
+        letter-spacing: 2px;
+        font-family: monospace;
+      }
+
+      .card-holder {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    }
   }
 `;
 
