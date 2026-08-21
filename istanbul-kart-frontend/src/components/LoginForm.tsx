@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 interface LoginFormProps {
   setIsLogin: (val: boolean) => void;
@@ -8,10 +9,9 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // --- KÖKTEN ÇÖZÜM BURASI ---
-  // Kullanıcı giriş ekranına geldiği an eski hafızayı sıfırlıyoruz!
   useEffect(() => {
     localStorage.removeItem('token');
   }, []);
@@ -19,11 +19,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!turnstileToken) {
+      alert("Lütfen güvenlik doğrulamasını tamamlayın.");
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password, turnstileToken })
       });
 
       if (response.ok) {
@@ -36,13 +42,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
           else if (data.accessToken) tokenToSave = data.accessToken;
           else if (data.jwt) tokenToSave = data.jwt;
         } catch {
-          // JSON değilmiş, sorun yok, düz metni kullanmaya devam edeceğiz.
+          // Eğer JSON parse edilemezse, tokenToSave zaten resultText olarak kalır
         }
 
-        // 3. Token'ı güvenle kaydediyoruz
+        // Token'ı güvenle kaydediyoruz
         localStorage.setItem('token', tokenToSave);
+        
+        // Cüzdan tarafında dinamik isim göstermek için kullanıcı adını da kaydediyoruz
+        localStorage.setItem('userName', username);
 
-        // 4. KESİN YÖNLENDİRME: Kullanıcıyı kart seçimine yolluyoruz
+        // KESİN YÖNLENDİRME: Kullanıcıyı kart seçimine yolluyoruz
         navigate('/dashboard'); 
         
       } else {
@@ -87,7 +96,26 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
           <span className="span-link">Forgot password?</span>
         </div>
 
-        <button type="submit" className="button-submit">Sign In</button>
+        {/* CLOUDFLARE TURNSTILE */}
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '15px 0' }}>
+          <Turnstile
+            siteKey="0x4AAAAAAEXUO4Wjd3vM27p_"
+            onSuccess={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken(null)}
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          className="button-submit"
+          disabled={!turnstileToken}
+          style={{ 
+            opacity: turnstileToken ? 1 : 0.5, 
+            cursor: turnstileToken ? 'pointer' : 'not-allowed' 
+          }}
+        >
+          Sign In
+        </button>
         <p className="p-text">Don't have an account? <span className="span-link" onClick={() => setIsLogin(false)}>Sign Up</span></p>
       </form>
     </div>

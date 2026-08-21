@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Turnstile } from '@marsidev/react-turnstile';
 
-// useNavigate'i kaldırdık çünkü artık kayıttan sonra Dashboard'a değil, Login'e geçeceğiz.
 interface RegisterFormProps {
   setIsLogin: (val: boolean) => void;
 }
@@ -9,8 +9,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ setIsLogin }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const turnstileRef = useRef<any>(null);
 
-  // Sayfa yüklendiği an eski token'ı acımadan siliyoruz!
   useEffect(() => {
     localStorage.removeItem('token');
   }, []);
@@ -18,6 +21,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ setIsLogin }) => {
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!turnstileToken) {
+      alert("Lütfen güvenlik doğrulamasını tamamlayın.");
+      return;
+    }
+
     if (password.length < 6) {
       alert("Password must be at least 6 characters!");
       return;
@@ -27,20 +35,24 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ setIsLogin }) => {
       const response = await fetch('http://localhost:8080/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, email, password, turnstileToken })
       });
 
       if (response.ok) {
-
         console.log("Registration successful!");
         alert("Registration successful! Please log in to continue.");
         setIsLogin(true);
       } else {
         const errorText = await response.text();
         alert("Registration failed: " + errorText);
+        
+        setTurnstileToken(null);
+        turnstileRef.current?.reset();
       }
     } catch {
       alert("Error: Cannot reach the backend.");
+      setTurnstileToken(null);
+      turnstileRef.current?.reset();
     }
   };
 
@@ -83,7 +95,27 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ setIsLogin }) => {
           <span>Password</span>
         </label>
 
-        <button type="submit" className="submit-neon">Submit</button>
+        {/* CLOUDFLARE TURNSTILE */}
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '15px 0' }}>
+          <Turnstile
+            ref={turnstileRef}
+            siteKey="0x4AAAAAAEXUO4Wjd3vM27p_"
+            onSuccess={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken(null)}
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          className="submit-neon"
+          disabled={!turnstileToken}
+          style={{ 
+            opacity: turnstileToken ? 1 : 0.5, 
+            cursor: turnstileToken ? 'pointer' : 'not-allowed' 
+          }}
+        >
+          Submit
+        </button>
         <p className="signin-text">Already have an account? <span className="span-link" onClick={() => setIsLogin(true)}>Signin</span></p>
       </form>
     </div>

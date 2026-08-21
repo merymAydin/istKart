@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import { cardsData } from "../data/cardsData";
 import walletVideo from "../assets/wallet.mp4";
+import Chatbot from "../components/Chatbot"; // Yolunu kendi klasör yapına göre ayarlayabilirsin
+
 interface PerkItem {
   name: string;
   icon: string;
@@ -23,7 +25,7 @@ interface CardItem {
 
 const Dashboard: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState<CardItem | null>(null);
-  const [successCard, setSuccessCard] = useState<CardItem | null>(null); // Başarı animasyonu için state
+  const [successCard, setSuccessCard] = useState<CardItem | null>(null);
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -59,15 +61,15 @@ const Dashboard: React.FC = () => {
       });
 
       if (response.ok) {
-        setSelectedCard(null); // Detay modalını kapat
-        setSuccessCard(card);  // Cüzdana eklenme animasyon modalını aç
+        setSelectedCard(null);
+        setSuccessCard(card);
       } else {
         const errorText = await response.text();
-        alert("Kart eklenemedi: " + errorText);
+        alert("Card couldn't be added: " + errorText);
       }
     } catch (error) {
-      console.error("Hata:", error);
-      alert("Sunucuya bağlanılamadı.");
+      console.error("Error:", error);
+      alert("Cannot connect to server.");
     } finally {
       setIsAdding(false);
     }
@@ -182,13 +184,10 @@ const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {/* BAŞARI & CÜZDANA EKLEME ANİMASYONLU MODALI */}
-
-      {/* VİDEO ANİMASYONLU BAŞARI MODALI */}
+      {/* BAŞARI MODALI */}
       {successCard && (
         <div className="modal-overlay" onClick={() => setSuccessCard(null)}>
           <div className="success-modal-box" onClick={(e) => e.stopPropagation()}>
-            
             <div className="success-video-container">
               <video 
                 src={walletVideo} 
@@ -214,6 +213,8 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      <Chatbot />
     </div>
   );
 };

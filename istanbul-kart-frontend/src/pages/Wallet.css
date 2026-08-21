@@ -4,6 +4,7 @@
   color: #0f172a;
   padding: 50px 40px;
   font-family: 'DM Sans', sans-serif;
+  position: relative;
 }
 
 .wallet-header {
@@ -145,7 +146,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* --- YAN YANA PANEL DÜZENİ (Kart Sol, Stats Sağ) --- */
 .panel-inner {
   padding: 40px;
 }
@@ -171,7 +171,6 @@
   flex: 1; 
 }
 
-/* --- YENİ BÜYÜTÜLMÜŞ KART TASARIMI --- */
 .realistic-card-widget {
   width: 100%;
   height: 240px; 
@@ -252,7 +251,6 @@
   text-transform: uppercase;
 }
 
-/* --- KARTIN ALTINDAKİ BUTONLAR --- */
 .rc-action-buttons {
   display: flex;
   gap: 15px;
@@ -294,4 +292,314 @@
   background: #cbd5e1;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* --- SPEND VE MODAL STİLLERİ --- */
+.spend-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transition: background 0.2s;
+}
+.spend-btn:hover {
+  background: #2563eb;
+}
+
+.success-modal-box {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 24px;
+  width: 380px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.success-modal-box h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 20px 0 8px 0;
+  color: #0f172a;
+}
+
+.success-modal-box p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+.success-modal-box form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.success-modal-box input, .success-modal-box select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+  font-family: inherit;
+  color: #0f172a;
+  background: #fff;
+}
+
+.success-modal-box input::placeholder {
+  color: #94a3b8;
+}
+
+.success-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.go-wallet-btn {
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.go-wallet-btn:hover {
+  background: #0284c7;
+}
+
+.close-success-btn {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.close-success-btn:hover {
+  background: #e2e8f0;
+}
+
+/* Scrollbar */
+div::-webkit-scrollbar { width: 6px; }
+div::-webkit-scrollbar-track { background: #f1f5f9; }
+div::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+div::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* --- ORTAK BUTON YÜKSEKLİK AYARI --- */
+.rc-btn {
+  height: 48px; /* Tüm butonların tam aynı hizada olması için sabitlendi */
+}
+
+/* --- SENİN ÖZEL SPEND BUTON TASARIMIN --- */
+.spend-3d-btn {
+  background: #dfdbdb; 
+  position: relative;
+  overflow: visible; /* Tooltipin dışarı taşması için */
+  padding: 0; /* İçeriğin tam oturması için rc-btn paddingini iptal ediyoruz */
+}
+
+.spend-3d-btn .button-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px; /* Dış köşeler */
+}
+
+.spend-3d-btn::before {
+  position: absolute;
+  content: attr(data-tooltip);
+  width: 90px;
+  height: 30px;
+  background-color: #555;
+  font-size: 0.85rem;
+  color: #fff;
+  border-radius: 4px;
+  line-height: 30px;
+  bottom: calc(100% + 10px);
+  left: calc(50% - 45px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  z-index: 20;
+}
+
+.spend-3d-btn::after {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: #555;
+  left: calc(50% - 6px);
+  bottom: calc(100% - 2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  z-index: 20;
+}
+
+.spend-3d-btn:hover::before, .spend-3d-btn:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.spend-3d-btn .text, .spend-3d-btn .icon {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.4s ease;
+  left: 0;
+}
+
+.spend-3d-btn .text {
+  top: 0;
+}
+
+.spend-3d-btn .icon {
+  top: 100%;
+}
+
+.spend-3d-btn:hover {
+  background: #1d4ed8;
+}
+
+.spend-3d-btn:hover .text {
+  top: -100%;
+}
+
+.spend-3d-btn:hover .icon {
+  top: 0;
+}
+
+
+/* --- SENİN ÖZEL AUTO-PAY SWITCH KUTUN --- */
+.autopay-3d-container {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  cursor: default;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px; /* Switch ve metin arasındaki boşluk */
+}
+
+.autopay-3d-container:hover {
+  background: #f8fafc; /* Üzerine gelince rengi değişmesin, sadece kapsayıcı */
+  transform: none; /* rc-btn zıplamasını iptal eder */
+  box-shadow: none;
+}
+
+/* Senin Gönderdiğin checkbox-wrapper-5 Kodunun Birebir Uyarlaması */
+.checkbox-wrapper-5 .check {
+  --size: 26px; /* Kutunun yüksekliğine tam oturması için oranlandı */
+  position: relative;
+  background: linear-gradient(90deg, #f19af3, #f099b5);
+  line-height: 0;
+  perspective: 400px;
+  font-size: var(--size);
+}
+
+.checkbox-wrapper-5 .check input[type="checkbox"],
+.checkbox-wrapper-5 .check label,
+.checkbox-wrapper-5 .check label::before,
+.checkbox-wrapper-5 .check label::after,
+.checkbox-wrapper-5 .check {
+  appearance: none;
+  display: inline-block;
+  border-radius: var(--size);
+  border: 0;
+  transition: .35s ease-in-out;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.checkbox-wrapper-5 .check label {
+  width: calc(2.2 * var(--size));
+  height: var(--size);
+  background: #d7d7d7;
+  overflow: hidden;
+  margin: 0; /* Default margin sıfırlandı */
+}
+
+.checkbox-wrapper-5 .check input[type="checkbox"] {
+  position: absolute;
+  z-index: 1;
+  width: calc(.8 * var(--size));
+  height: calc(.8 * var(--size));
+  top: calc(.1 * var(--size));
+  left: calc(.1 * var(--size));
+  background: linear-gradient(45deg, #dedede, #ffffff);
+  box-shadow: 0 6px 7px rgba(0,0,0,0.3);
+  outline: none;
+  margin: 0;
+}
+
+.checkbox-wrapper-5 .check input[type="checkbox"]:checked {
+  left: calc(1.3 * var(--size));
+}
+
+.checkbox-wrapper-5 .check input[type="checkbox"]:checked + label {
+  background: transparent;
+}
+
+.checkbox-wrapper-5 .check label::before,
+.checkbox-wrapper-5 .check label::after {
+  content: "· ·";
+  position: absolute;
+  overflow: hidden;
+  left: calc(.15 * var(--size));
+  top: calc(.5 * var(--size));
+  height: var(--size);
+  letter-spacing: calc(-0.04 * var(--size));
+  color: #9b9b9b;
+  font-family: "Times New Roman", serif;
+  z-index: 2;
+  font-size: calc(.6 * var(--size));
+  border-radius: 0;
+  transform-origin: 0 0 calc(-0.5 * var(--size));
+  backface-visibility: hidden;
+}
+
+.checkbox-wrapper-5 .check label::after {
+  content: "●";
+  top: calc(.65 * var(--size));
+  left: calc(.2 * var(--size));
+  height: calc(.1 * var(--size));
+  width: calc(.35 * var(--size));
+  font-size: calc(.2 * var(--size));
+  transform-origin: 0 0 calc(-0.4 * var(--size));
+}
+
+.checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::before,
+.checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::after {
+  left: calc(1.55 * var(--size));
+  top: calc(.4 * var(--size));
+  line-height: calc(.1 * var(--size));
+  transform: rotateY(360deg);
+}
+
+.checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::after {
+  height: calc(.16 * var(--size));
+  top: calc(.55 * var(--size));
+  left: calc(1.6 * var(--size));
+  font-size: calc(.6 * var(--size));
+  line-height: 0;
 }
