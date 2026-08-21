@@ -4,10 +4,11 @@ import { cardsData } from '../data/cardsData';
 
 interface CardsGridProps {
   onCardClick: (card: CardData) => void;
-  slotRefs?: React.MutableRefObject<(HTMLDivElement | null)[]>;
+  slotRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
+  boxRefs: React.MutableRefObject<(HTMLDivElement | null)[]>; 
 }
 
-const CardsGrid = React.forwardRef<HTMLDivElement, CardsGridProps>(({ onCardClick, slotRefs }, ref) => {
+const CardsGrid = React.forwardRef<HTMLDivElement, CardsGridProps>(({ onCardClick, slotRefs, boxRefs }, ref) => {
   return (
     <section className="cards-grid-section" ref={ref}>
       <div className="grid-header">
@@ -21,14 +22,18 @@ const CardsGrid = React.forwardRef<HTMLDivElement, CardsGridProps>(({ onCardClic
             key={card.id} 
             className="grid-card-box" 
             onClick={() => onCardClick(card)}
+            ref={el => { boxRefs.current[index] = el; }} 
           >
-            <div className="gc-header" style={{ backgroundColor: card.lightBg }}>
+            {/* DİKKAT: Arka plan rengini ayrı bir dive aldık ki rulo gibi açabilelim */}
+            <div className="gc-header">
+              <div className="gc-header-bg" style={{ backgroundColor: card.lightBg }}></div>
               <h3 style={{ color: card.themeColor }}>{card.title}</h3>
-              <div 
-                className="card-slot-target" 
-                ref={slotRefs ? el => { slotRefs.current[index] = el; } : undefined}
-              />
+              
+              <div className="card-slot-target" ref={el => { slotRefs.current[index] = el; }}>
+                <img src={card.img} className="internal-docked-card" alt="card" />
+              </div>
             </div>
+
             <div className="gc-body">
               <ul>
                 {card.features.map((feature, idx) => (

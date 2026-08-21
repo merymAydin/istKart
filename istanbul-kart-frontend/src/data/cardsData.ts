@@ -4,6 +4,11 @@ import greenCard from '../assets/greencard.webp';
 import blueCard from '../assets/blue.webp';
 import yellowCard from '../assets/yellow.webp';
 import cityCard from '../assets/tourist.webp';
+import beachIcon from '../assets/vacations.png';
+import gymIcon from '../assets/weights.png';
+import parkingIcon from '../assets/parking.png';
+import museumIcon from '../assets/museum.png';
+import shoppingIcon from '../assets/market.png';
 import type { CardData } from '../components/CardDetailModal';
 
 export const cardsData: CardData[] = [
@@ -16,7 +21,7 @@ export const cardsData: CardData[] = [
     img: redCard,
     description: 'Standard anonymous Istanbulkart for daily transit use.',
     requirements: ['None'],
-    fee: 'Standard tariff'
+    fee: 'Standard tariff(No subscription option)'
   },
   {
     id: 'plus',
@@ -25,7 +30,7 @@ export const cardsData: CardData[] = [
     lightBg: '#fef3c7',
     features: ['Virtual Istanbulkart Plus', 'Istanbulkart Plus (Standard)', 'Istanbulkart Plus (Student)'],
     img: plusCard,
-    description: 'Advanced features with digital account balance management.',
+    description: 'It could be used as debit card with advanced features and digital account balance management.',
     requirements: ['Mobile verification'],
     fee: 'Plus tariff'
   },
@@ -45,11 +50,19 @@ export const cardsData: CardData[] = [
     title: 'Blue Istanbulkart',
     themeColor: '#3b82f6',
     lightBg: '#dbeafe',
-    features: ['Blue Card', 'Island Resident'],
+    features: ['Blue Card'],
     img: blueCard,
     description: 'Monthly subscription pass for frequent commuters.',
     requirements: ['ID card verification'],
-    fee: 'Monthly fixed fee'
+    fee: 'Monthly fixed fee',
+    perks: [
+      { name: 'Public Beach Access', icon: beachIcon },
+      { name: 'Gym Facilities', icon: gymIcon },
+      { name: 'Autopark Privileges', icon: parkingIcon },
+      { name: 'Museum Entries', icon: museumIcon },
+      { name: 'Shopping Discounts', icon: shoppingIcon }
+    ]
+    
   },
   {
     id: 'free',

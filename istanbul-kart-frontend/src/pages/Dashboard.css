@@ -1,0 +1,128 @@
+/* Başarı / Cüzdana Ekleme Modali */
+.success-modal-box {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 24px;
+  width: 420px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  animation: modalPopup 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.success-modal-box h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 20px 0 8px 0;
+}
+
+.success-modal-box p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+/* Cüzdan ve Kart Animasyon Konteyneri */
+.wallet-animation-wrapper {
+  position: relative;
+  width: 140px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 10px auto;
+}
+
+/* Cüzdan Gövdesi */
+.wallet-body {
+  position: relative;
+  width: 90px;
+  height: 65px;
+  background: #111827;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Cüzdanın Yanındaki Mavi Kulakçık / Çıtçıt */
+.wallet-tab {
+  position: absolute;
+  right: -6px;
+  top: 22px;
+  width: 10px;
+  height: 22px;
+  background: #0ea5e9;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Kartın Yukarıdan Cüzdan İçine Düşme Animasyonu */
+.sliding-card-anim {
+  position: absolute;
+  width: 46px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+  top: -35px;
+  left: 22px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  animation: dropIntoWallet 1.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+}
+
+@keyframes dropIntoWallet {
+  0% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  40% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0.95;
+  }
+}
+
+/* Butonlar */
+.success-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.go-wallet-btn {
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.go-wallet-btn:hover {
+  background: #0284c7;
+}
+
+.close-success-btn {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.close-success-btn:hover {
+  background: #e2e8f0;
+}

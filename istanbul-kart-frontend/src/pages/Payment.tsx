@@ -10,13 +10,11 @@ const Payment: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  
   const [isSubscribed, setIsSubcribed] = useState(
     location.state?.openAbonman || false,
   );
   const [cardType, setCardType] = useState("REGULAR");
 
-  
   const [amount, setAmount] = useState("");
   const [cardHolderName, setCardHolderName] = useState("");
   const [creditCardNumber, setCreditCardNumber] = useState("");
@@ -24,7 +22,6 @@ const Payment: React.FC = () => {
   const [cvc, setCvc] = useState("");
   const [istanbulCardNumber, setIstanbulCardNumber] = useState("");
 
- 
   useEffect(() => {
     const fetchUserCard = async () => {
       const token = localStorage.getItem("token");
@@ -53,7 +50,6 @@ const Payment: React.FC = () => {
     fetchUserCard();
   }, []);
 
- 
   const abonmanPrice =
     cardType === "STUDENT" || cardType === "ÖĞRENCİ" ? 150 : 300;
 
@@ -148,7 +144,6 @@ const Payment: React.FC = () => {
                 <h2>Secure Payment</h2>
               </div>
 
-               
               <div className="payment-type-toggle">
                 <label
                   className={`toggle-option ${!isSubscribed ? "active" : ""}`}
@@ -182,7 +177,7 @@ const Payment: React.FC = () => {
                   placeholder="E.g: 100"
                   value={isSubscribed ? abonmanPrice : amount}
                   onChange={(e) => !isSubscribed && setAmount(e.target.value)}
-                  disabled={isSubscribed} // Abonman ise elle girmeyi engelle
+                  disabled={isSubscribed}
                   style={{
                     cursor: isSubscribed ? "not-allowed" : "text",
                     opacity: isSubscribed ? 0.8 : 1,
@@ -280,7 +275,7 @@ const Payment: React.FC = () => {
                     >
                       <path
                         d="M345.441 248.292L151.154 442.573c-12.359 12.365-32.397 12.365-44.75 0-12.354-12.354-12.354-32.391 0-44.744L278.318 225.92 106.409 54.017c-12.354-12.359-12.354-32.394 0-44.748 12.354-12.359 32.391-12.359 44.75 0l194.287 194.284c6.177 6.18 9.262 14.271 9.262 22.366 0 8.099-3.091 16.196-9.267 22.373z"
-                        fill="#a1a1ff"
+                        fill="#3b82f6"
                       />
                     </svg>
                   </div>
@@ -300,11 +295,11 @@ const SuccessContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 20px;
-  background: #0c0f14;
+  background: #ffffff;
   padding: 50px;
   border-radius: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
 
   h2 {
     color: #10b981;
@@ -317,7 +312,7 @@ const SuccessContainer = styled.div`
 const StyledWrapper = styled.div`
   .payment-page {
     min-height: 100vh;
-    background-color: #0f172a;
+    background-color: #f8fafc;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -326,13 +321,13 @@ const StyledWrapper = styled.div`
   }
 
   .form {
-    background: #0c0f14;
+    background: #ffffff;
     box-shadow:
       0px 187px 75px rgba(0, 0, 0, 0.01),
-      0px 105px 63px rgba(0, 0, 0, 0.05),
-      0px 47px 47px rgba(0, 0, 0, 0.09),
-      0px 12px 26px rgba(0, 0, 0, 0.1),
-      0px 0px 0px rgba(0, 0, 0, 0.1);
+      0px 105px 63px rgba(0, 0, 0, 0.02),
+      0px 47px 47px rgba(0, 0, 0, 0.03),
+      0px 12px 26px rgba(0, 0, 0, 0.04),
+      0px 0px 0px rgba(0, 0, 0, 0.02);
     width: 480px;
     display: flex;
     flex-direction: column;
@@ -340,7 +335,7 @@ const StyledWrapper = styled.div`
     padding: 30px;
     position: relative;
     border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid #e2e8f0;
   }
 
   .secure-header {
@@ -354,7 +349,7 @@ const StyledWrapper = styled.div`
     h2 {
       font-size: 1.2rem;
       margin: 0;
-      color: #e2e8f0;
+      color: #0f172a;
     }
   }
 
@@ -362,7 +357,7 @@ const StyledWrapper = styled.div`
     display: flex;
     gap: 10px;
     margin-bottom: 5px;
-    background: #1e1e2f;
+    background: #f1f5f9;
     padding: 6px;
     border-radius: 12px;
   }
@@ -373,7 +368,7 @@ const StyledWrapper = styled.div`
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
-    color: #8b8e98;
+    color: #64748b;
     font-size: 14px;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -384,9 +379,9 @@ const StyledWrapper = styled.div`
   }
 
   .toggle-option.active {
-    background: #3b82f6;
-    color: #ffffff;
-    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    background: #ffffff;
+    color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 
   .form .label {
@@ -405,13 +400,13 @@ const StyledWrapper = styled.div`
     padding: 0 10px;
     transition: all 300ms;
     font-size: 12px;
-    color: #8b8e98;
+    color: #64748b;
     font-weight: 600;
     width: fit-content;
     top: 14px;
     position: relative;
     left: 15px;
-    background: #0c0f14;
+    background: #ffffff;
   }
 
   .form .input-field {
@@ -420,18 +415,18 @@ const StyledWrapper = styled.div`
     text-indent: 15px;
     border-radius: 15px;
     outline: none;
-    background-color: transparent;
-    border: 1px solid #21262e;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
     transition: all 0.3s;
     caret-color: #3b82f6;
-    color: #aeaeae;
+    color: #0f172a;
     font-size: 14px;
     box-sizing: border-box;
   }
 
   .form .input-field.amount-input {
     border-color: #3b82f6;
-    color: #fff;
+    color: #0f172a;
     font-size: 18px;
     font-weight: bold;
   }
@@ -463,7 +458,7 @@ const StyledWrapper = styled.div`
   }
 
   .container {
-    background-color: #1e1e2f;
+    background-color: #f1f5f9;
     display: flex;
     width: 100%;
     height: 70px;
@@ -514,7 +509,7 @@ const StyledWrapper = styled.div`
   }
 
   .right-side:hover {
-    background-color: #2a2a3d;
+    background-color: #e2e8f0;
   }
 
   .arrow {
@@ -527,7 +522,7 @@ const StyledWrapper = styled.div`
     font-size: 18px;
     font-family: "Lexend Deca", sans-serif;
     margin-left: 20px;
-    color: #d1d5db;
+    color: #334155;
     font-weight: bold;
   }
 
@@ -541,7 +536,7 @@ const StyledWrapper = styled.div`
     z-index: 10;
     flex-direction: column;
     align-items: center;
-    box-shadow: 9px 9px 9px -2px rgba(59, 130, 246, 0.5);
+    box-shadow: 9px 9px 9px -2px rgba(59, 130, 246, 0.3);
   }
 
   .card-line {
@@ -590,7 +585,7 @@ const StyledWrapper = styled.div`
   .post {
     width: 45px;
     height: 50px;
-    background-color: #4b5563;
+    background-color: #94a3b8;
     position: absolute;
     z-index: 11;
     bottom: 5px;
@@ -602,7 +597,7 @@ const StyledWrapper = styled.div`
   .post-line {
     width: 35px;
     height: 6px;
-    background-color: #1f2937;
+    background-color: #cbd5e1;
     position: absolute;
     border-radius: 0px 0px 2px 2px;
     right: 5px;
@@ -614,14 +609,14 @@ const StyledWrapper = styled.div`
     position: absolute;
     width: 35px;
     height: 6px;
-    background-color: #374151;
+    background-color: #e2e8f0;
     top: -6px;
   }
 
   .screen {
     width: 35px;
     height: 16px;
-    background-color: #e5e7eb;
+    background-color: #f1f5f9;
     position: absolute;
     top: 15px;
     right: 5px;
@@ -631,10 +626,10 @@ const StyledWrapper = styled.div`
   .numbers {
     width: 8px;
     height: 8px;
-    background-color: #6b7280;
+    background-color: #cbd5e1;
     box-shadow:
-      0 -12px 0 0 #6b7280,
-      0 12px 0 0 #6b7280;
+      0 -12px 0 0 #cbd5e1,
+      0 12px 0 0 #cbd5e1;
     border-radius: 2px;
     position: absolute;
     transform: rotate(90deg);
@@ -645,10 +640,10 @@ const StyledWrapper = styled.div`
   .numbers-line2 {
     width: 8px;
     height: 8px;
-    background-color: #9ca3af;
+    background-color: #e2e8f0;
     box-shadow:
-      0 -12px 0 0 #9ca3af,
-      0 12px 0 0 #9ca3af;
+      0 -12px 0 0 #e2e8f0,
+      0 12px 0 0 #e2e8f0;
     border-radius: 2px;
     position: absolute;
     transform: rotate(90deg);

@@ -1,0 +1,297 @@
+.wallet-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  color: #0f172a;
+  padding: 50px 40px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.wallet-header {
+  margin-bottom: 40px;
+}
+.wallet-header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+.wallet-header p { color: #64748b; font-size: 1.1rem; }
+
+.wallet-content-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 40px;
+}
+
+/* Sol Sidebar */
+.wallet-cards-sidebar {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  height: fit-content;
+}
+.wallet-cards-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #334155; }
+
+.sidebar-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar-card-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #0ea5e9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 0;
+}
+
+.sidebar-card-item:hover {
+  background: #f1f5f9;
+  transform: translateX(4px);
+}
+
+.sidebar-card-item.selected {
+  background: #ffffff;
+  border-color: #0ea5e9;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.sidebar-card-item img {
+  width: 40px;
+  border-radius: 0;
+}
+
+.sidebar-card-meta h4 { font-size: 0.95rem; font-weight: 700; margin: 0 0 4px 0; }
+.sidebar-card-meta p { font-size: 0.8rem; color: #64748b; font-family: monospace; margin: 0; }
+
+/* Sağ Detay Paneli */
+.wallet-card-details-panel {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  overflow: hidden;
+}
+
+.panel-stats-grid {
+  padding: 40px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.stat-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 25px;
+  border-radius: 0;
+}
+
+.stat-card span { font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-card h2 { font-size: 1.8rem; font-weight: 800; color: #0f172a; margin: 10px 0 0 0; }
+
+.wallet-loading, .wallet-empty {
+  padding: 80px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #64748b;
+}
+.explore-btn {
+  display: inline-block;
+  margin-top: 20px;
+  background: #0ea5e9;
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* Light Tema Segmented Switch Stilleri */
+.light-segmented-switch {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e2e8f0;
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+  margin-bottom: 25px;
+}
+
+.light-switch-option {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 8px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.light-switch-option:hover:not(.active) {
+  color: #0f172a;
+}
+
+.light-switch-option.active {
+  background-color: #ffffff;
+  color: #0ea5e9;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* --- YAN YANA PANEL DÜZENİ (Kart Sol, Stats Sağ) --- */
+.panel-inner {
+  padding: 40px;
+}
+
+.wallet-detail-layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.wallet-card-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 0 0 auto;
+  width: 420px; 
+}
+
+.wallet-stats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1; 
+}
+
+/* --- YENİ BÜYÜTÜLMÜŞ KART TASARIMI --- */
+.realistic-card-widget {
+  width: 100%;
+  height: 240px; 
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  font-family: 'Arial', sans-serif;
+}
+
+.realistic-card-widget .rc-content {
+  position: relative;
+  z-index: 3;
+  padding: 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #ffffff;
+  box-sizing: border-box;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.rc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.rc-contactless {
+  opacity: 0.8;
+  margin-right: 10px; 
+}
+
+.rc-middle .rc-label {
+  font-size: 13px;
+  margin: 0;
+  opacity: 0.9;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.rc-middle .rc-amount {
+  font-size: 38px;
+  margin: 4px 0 0 0;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.rc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.rc-footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; 
+}
+
+.rc-number {
+  font-size: 16px; 
+  letter-spacing: 2px; 
+  font-family: monospace;
+  font-weight: 700;
+  white-space: nowrap; 
+  margin-bottom: 6px;
+}
+
+.rc-holder {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* --- KARTIN ALTINDAKİ BUTONLAR --- */
+.rc-action-buttons {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+}
+
+.rc-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  gap: 8px;
+}
+
+.rc-transfer {
+  background: #0f172a;
+  color: white;
+}
+
+.rc-transfer:hover {
+  background: #1e293b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.rc-subscription {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.rc-subscription:hover {
+  background: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
