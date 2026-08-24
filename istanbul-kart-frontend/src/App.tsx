@@ -3,6 +3,7 @@ import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import Payment from './pages/Payment';  
 import Wallet from './pages/Wallet';
+import History from './pages/History';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/payment" element={<Payment />} />  
         <Route path="/wallet" element={<Wallet />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </Router>
   );

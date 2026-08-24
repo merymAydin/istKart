@@ -11,19 +11,24 @@ const Payment: React.FC = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const [isSubscribed, setIsSubcribed] = useState(
-    location.state?.openAbonman || false,
+    location.state?.isSubscription || location.state?.openAbonman || false,
   );
-  const [cardType, setCardType] = useState("REGULAR");
+  
+  // Cüzdan sayfasından gelen kart tipini doğrudan alıyoruz
+  const [cardType, setCardType] = useState(location.state?.cardType || "REGULAR");
 
   const [amount, setAmount] = useState("");
   const [cardHolderName, setCardHolderName] = useState("");
   const [creditCardNumber, setCreditCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvc, setCvc] = useState("");
-  const [istanbulCardNumber, setIstanbulCardNumber] = useState("");
+  const [istanbulCardNumber, setIstanbulCardNumber] = useState(location.state?.cardNumber || "");
 
   useEffect(() => {
+    // Eğer cüzdandan kart bilgisi gelmediyse mecburen API'den çekiyoruz
     const fetchUserCard = async () => {
+      if (location.state?.cardNumber && location.state?.cardType) return;
+
       const token = localStorage.getItem("token");
       if (!token) return;
 
@@ -38,8 +43,8 @@ const Payment: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           if (data.exists && data.cardNumber) {
-            setIstanbulCardNumber(data.cardNumber);
-            if (data.cardType) setCardType(data.cardType);
+            if (!istanbulCardNumber) setIstanbulCardNumber(data.cardNumber);
+            if (!cardType && data.cardType) setCardType(data.cardType);
           }
         }
       } catch (error) {
@@ -48,10 +53,17 @@ const Payment: React.FC = () => {
     };
 
     fetchUserCard();
-  }, []);
+  }, [istanbulCardNumber, cardType, location.state]);
 
-  const abonmanPrice =
-    cardType === "STUDENT" || cardType === "ÖĞRENCİ" ? 150 : 300;
+  // Cüzdandan gelen fiyatı öncelikli al, yoksa gelen cardType'a göre belirle
+  const normalizedType = (cardType || "").toUpperCase();
+  const isDiscounted = 
+    normalizedType.includes("STUDENT") || 
+    normalizedType.includes("ÖĞRENCİ") || 
+    normalizedType.includes("DISCOUNT") ||
+    normalizedType.includes("İNDİRİMLİ");
+
+  const abonmanPrice = location.state?.price ?? (isDiscounted ? 150 : 300);
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,7 +181,7 @@ const Payment: React.FC = () => {
 
               <label className="label">
                 <span className="title">
-                  {isSubscribed ? "Abonman Tutarı (TL)" : "Amount to Load (TL)"}
+                  {isSubscribed ? "Amount (TL)" : "Amount to Load (TL)"}
                 </span>
                 <input
                   className="input-field amount-input"
@@ -390,23 +402,16 @@ const StyledWrapper = styled.div`
     gap: 5px;
   }
 
-  .form .label:has(input:focus) .title {
-    top: 0;
-    left: 0;
-    color: #3b82f6;
-  }
-
   .form .label .title {
-    padding: 0 10px;
-    transition: all 300ms;
+    padding: 0 4px;
     font-size: 12px;
     color: #64748b;
     font-weight: 600;
     width: fit-content;
-    top: 14px;
-    position: relative;
-    left: 15px;
-    background: #ffffff;
+    margin-left: 12px;
+    margin-bottom: -2px;
+    background: transparent;
+    position: static;
   }
 
   .form .input-field {

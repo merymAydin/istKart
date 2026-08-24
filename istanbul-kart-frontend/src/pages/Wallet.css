@@ -603,3 +603,335 @@ div::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   font-size: calc(.6 * var(--size));
   line-height: 0;
 }
+
+/* --- YENİ EKLENEN STİLLER (Satır içi stillerin yerine) --- */
+
+.video-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.spend-video {
+  width: 100%;
+  height: 220px; /* 150px yerine 220px yaparak çerçeveyi uzattık */
+  object-fit: contain; /* cover yerine contain yaparak videonun kesilmesini engelledik */
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.active-card-info {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: bold;
+}
+
+.action-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.action-button-row {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  height: 48px;
+}
+
+.autopay-form {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.autopay-form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.autopay-form-column {
+  flex: 1;
+}
+
+.autopay-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.autopay-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  box-sizing: border-box;
+}
+
+.autopay-form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.autopay-btn-save {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.autopay-btn-cancel {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+}
+
+/* --- YENİ KART DETAYLARI VE BUTON STİLLERİ --- */
+
+.expiry-date-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 5px;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deactivate-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+
+.deactivate-btn:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.status-text {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 10px 0 0 0;
+}
+
+.status-text.active {
+  color: #10b981;
+}
+
+.status-text.inactive {
+  color: #ef4444;
+}
+
+/* --- HİSTORY BUTONU VE ORİJİNAL YAPRAK ANİMASYONLARI --- */
+
+.history-btn {
+  position: relative;
+  padding: 15px 45px;
+  background: #fec195;
+  font-size: 17px;
+  font-weight: 700;
+  color: #181818;
+  cursor: pointer;
+  border: 1px solid #fec195;
+  border-radius: 8px;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+  width: 100%;
+  text-align: center;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  background-size: 200% 200%;
+}
+
+.history-btn:hover {
+  border: 1px solid #f3b182;
+  background: linear-gradient(
+    85deg,
+    #fec195,
+    #fcc196,
+    #fabd92,
+    #fac097,
+    #fac39c
+  );
+  animation: wind 2s ease-in-out infinite;
+}
+
+@keyframes wind {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 50% 100%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.icon-1 {
+  position: absolute;
+  top: 0;
+  right: 15px; /* Butonun içine tam oturması için sağdan boşluk eklendi */
+  width: 25px;
+  transform-origin: 0 0;
+  transform: rotate(10deg);
+  transition: all 0.5s ease-in-out;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
+}
+
+.history-btn:hover .icon-1 {
+  animation: slay-1 3s cubic-bezier(0.52, 0, 0.58, 1) infinite;
+  transform: rotate(10deg);
+}
+
+@keyframes slay-1 {
+  0% {
+    transform: rotate(10deg);
+  }
+
+  50% {
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    transform: rotate(10deg);
+  }
+}
+
+.icon-2 {
+  position: absolute;
+  top: 0;
+  left: 35px; /* Butonun içine tam oturması için soldan boşluk eklendi */
+  width: 12px;
+  transform-origin: 50% 0;
+  transform: rotate(10deg);
+  transition: all 1s ease-in-out;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
+}
+
+.history-btn:hover .icon-2 {
+  animation: slay-2 3s cubic-bezier(0.52, 0, 0.58, 1) 1s infinite;
+  transform: rotate(0);
+}
+
+@keyframes slay-2 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(15deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.icon-3 {
+  position: absolute;
+  top: 0;
+  left: 10px; /* Butonun içine tam oturması için soldan boşluk eklendi */
+  width: 18px;
+  transform-origin: 50% 0;
+  transform: rotate(-5deg);
+  transition: all 1s ease-in-out;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
+}
+
+.history-btn:hover .icon-3 {
+  animation: slay-3 2s cubic-bezier(0.52, 0, 0.58, 1) 1s infinite;
+  transform: rotate(0);
+}
+
+@keyframes slay-3 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
+}
+/* --- SUCCESS & FAILURE MODAL --- */
+.pass-success-container, .pass-failed-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.trip-text {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #10b981, #0ea5e9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.status-video {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.fail-text {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.fail-subtext {
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.fail-subtext span {
+  display: inline-block;
+  font-weight: 700;
+  color: #ef4444;
+  margin-top: 12px;
+  font-family: monospace;
+  font-size: 1.2rem;
+  background: #fef2f2;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px dashed #f87171;
+}

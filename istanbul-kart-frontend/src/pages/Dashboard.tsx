@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import { cardsData } from "../data/cardsData";
 import walletVideo from "../assets/wallet.mp4";
-import Chatbot from "../components/Chatbot"; // Yolunu kendi klasör yapına göre ayarlayabilirsin
+import Chatbot from "../components/Chatbot"; 
 
 interface PerkItem {
   name: string;

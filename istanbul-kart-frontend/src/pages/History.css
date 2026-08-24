@@ -1,0 +1,147 @@
+.history-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding: 50px 40px;
+  font-family: 'DM Sans', sans-serif;
+  color: #0f172a;
+}
+
+.history-header {
+  margin-bottom: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: #1d4ed8;
+}
+
+.history-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.history-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.history-content {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.loading-state, .empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  width: 2px;
+  background: #e2e8f0;
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.timeline-icon.spend {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.timeline-icon.topup {
+  background: #d1fae5;
+  color: #10b981;
+}
+
+.timeline-content {
+  flex: 1;
+  background: #f8fafc;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.timeline-header h4 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #334155;
+}
+
+.tx-amount {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.tx-amount.positive { color: #10b981; }
+.tx-amount.negative { color: #ef4444; }
+
+.tx-date {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
