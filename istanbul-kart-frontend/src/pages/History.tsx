@@ -5,7 +5,7 @@ import "./History.css";
 interface Transaction {
   id: number;
   amount: number;
-  description: string;
+  transactionType: string;
   transactionDate: string;
 }
 
@@ -42,7 +42,7 @@ useEffect(() => {
           setTransactions(sortedData);
         }
       } catch (error) {
-        console.error("Geçmiş yüklenemedi:", error);
+        console.error("History could not loaded:", error);
       } finally {
         setIsLoading(false);
       }
@@ -74,13 +74,16 @@ useEffect(() => {
         ) : (
           <ul className="timeline">
             {transactions.map((tx) => {
-              // Null kontrolü ve açıklama
-              const desc = tx.description || "İşlem (Bilinmiyor)";
+              // 'description' yerine backend'den gelen 'transactionType' alanını okuyoruz
+              const desc = tx.transactionType || "İşlem";
               
-              // Harcama mı? (Tutar eksi ise veya açıklamasında geçiş/kullanıldı yazıyorsa)
-              const isSpend = tx.amount < 0 || desc.toLowerCase().includes("geçiş") || desc.toLowerCase().includes("kullanıldı");
-              
-              // Tutar 0 ise ve bu bir geçişse, abonman kullanılmıştır
+              // Veritabanından - (eksi) gelmişse VEYA içinde 'geçiş', 'ride', 'pass' geçiyorsa bu bir harcamadır
+              const isSpend = tx.amount < 0 || 
+                              desc.toLowerCase().includes("geçiş") || 
+                              desc.toLowerCase().includes("ride") || 
+                              desc.toLowerCase().includes("pass");
+                              
+              // 0 TL'lik harcamalar abonmandır
               const isAbonmanRide = isSpend && (tx.amount === 0 || tx.amount === 0.0);
               
               return (
@@ -98,12 +101,11 @@ useEffect(() => {
                   </div>
                   <div className="timeline-content">
                     <div className="timeline-header">
-                      {/* Durak ismi veya işlem açıklaması burada görünecek */}
                       <h4>{desc}</h4> 
                       <span className={`tx-amount ${isSpend ? "negative" : "positive"}`}>
                         {isAbonmanRide 
-                          ? "-1 Ride" /* Abonmansa eksi 1 biniş yaz */
-                          : `${isSpend ? "-" : "+"}₺${Math.abs(tx.amount).toFixed(2)}` /* Değilse -15.00 TL yaz */
+                          ? "-1 Ride" 
+                          : `${tx.amount < 0 ? "-" : "+"}₺${Math.abs(tx.amount).toFixed(2)}`
                         }
                       </span>
                     </div>

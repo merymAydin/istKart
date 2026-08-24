@@ -28,9 +28,9 @@ export const cardsData: CardData[] = [
     title: 'Istanbulkart Plus',
     themeColor: '#f59e0b',
     lightBg: '#fef3c7',
-    features: ['Virtual Istanbulkart Plus', 'Istanbulkart Plus (Standard)', 'Istanbulkart Plus (Student)'],
+    features: ['Istanbulkart Plus'],
     img: plusCard,
-    description: 'It could be used as debit card with advanced features and digital account balance management.',
+    description: 'It can be used globally as a debit card, featuring advanced capabilities and digital account balance management.',
     requirements: ['Mobile verification'],
     fee: 'Plus tariff'
   },
