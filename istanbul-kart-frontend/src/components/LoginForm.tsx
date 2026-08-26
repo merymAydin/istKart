@@ -15,52 +15,50 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
   useEffect(() => {
     localStorage.removeItem('token');
   }, []);
-  // ---------------------------
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!turnstileToken) {
-      alert("Lütfen güvenlik doğrulamasını tamamlayın.");
+      alert("Please complete the Turnstile verification.");
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, turnstileToken })
+      const response = await fetch("http://localhost:8080/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          turnstileToken // Eğer backend token'ı bekliyorsa buraya eklenir
+        }),
       });
 
       if (response.ok) {
-        const resultText = await response.text(); 
-        let tokenToSave = resultText; 
+        const data = await response.json();
+        
+        // Token ve kullanıcı bilgilerini kaydedelim
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", username);
 
-        try {
-          const data = JSON.parse(resultText);
-          if (data.token) tokenToSave = data.token;
-          else if (data.accessToken) tokenToSave = data.accessToken;
-          else if (data.jwt) tokenToSave = data.jwt;
-        } catch {
-          // Eğer JSON parse edilemezse, tokenToSave zaten resultText olarak kalır
+        // Kullanıcının rolünü kontrol edelim
+        const userRole = data.role || data.roles; 
+
+        if (userRole === "ADMIN" || userRole?.includes("ADMIN")) {
+          navigate("/admin-kyc");
+        } else {
+          navigate("/wallet"); 
         }
-
-        // Token'ı güvenle kaydediyoruz
-        localStorage.setItem('token', tokenToSave);
-        
-        // Cüzdan tarafında dinamik isim göstermek için kullanıcı adını da kaydediyoruz
-        localStorage.setItem('userName', username);
-
-        // KESİN YÖNLENDİRME: Kullanıcıyı kart seçimine yolluyoruz
-        navigate('/dashboard'); 
-        
       } else {
-        const errorText = await response.text();
-        alert("Login failed: " + errorText);
+        const errText = await response.text();
+        alert("Login failed: " + (errText || "Invalid credentials"));
       }
-    } catch (error) {
-      console.error("Login API error:", error);
-      alert("Error: Cannot reach the backend.");
+    } catch (err) {
+      console.error("An error occurred during login:", err);
+      alert("Network error or server is down.");
     }
   };
 

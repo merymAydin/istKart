@@ -1,0 +1,190 @@
+.kyc-container {
+  max-width: 550px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.kyc-container h2 {
+  font-size: 22px;
+  color: #333333;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 15px;
+}
+
+.step-content p {
+  color: #555555;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 5px;
+}
+
+.step-content input[type="text"],
+.step-content input[type="number"],
+.step-content select,
+.step-content textarea {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.step-content input:focus,
+.step-content select:focus,
+.step-content textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.step-content textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.step-content input[type="file"] {
+  padding: 10px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.button-group button {
+  flex: 1;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.button-group button[type="submit"] {
+  background-color: #2563eb;
+  color: white;
+}
+
+.button-group button[type="submit"]:hover {
+  background-color: #1d4ed8;
+}
+
+.button-group button[type="button"] {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.button-group button[type="button"]:hover {
+  background-color: #cbd5e1;
+}
+
+/* --- 1. RESİMDEKİ KAPSÜL (BÜTÜNLEŞİK) STEPPER TASARIMI --- */
+/* --- KUSURSUZ KAPSÜL HİZALAMASI (1. RESİMDEKİ GİBİ) --- */
+.stepper-wrapper {
+  position: relative;
+  margin-bottom: 70px; /* Yazılar dairenin altına ineceği için biraz daha boşluk bıraktık */
+}
+
+/* Arkadaki Koyu Gri Kapsül Bar */
+.stepper-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 32px; /* Dairelerle BİREBİR aynı kalınlıkta! */
+  background-color: #535353;
+  border-radius: 32px;
+  z-index: 1;
+}
+
+/* Üstüne Binen Parlak Yeşil Sıvı/Bar */
+.stepper-fill {
+  height: 100%;
+  background-color: rgb(0, 205, 0);
+  border-radius: 32px;
+  transition: width 0.4s ease-in-out; 
+}
+
+/* Noktaların Ana Taşıyıcısı */
+.stepper-steps {
+  position: relative;
+  z-index: 2; 
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.stepper-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 32px; /* Kapsülün kenarlarına sıfıra sıfır oturması için */
+}
+
+/* İkon Daireleri */
+.step-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; 
+  transition: background-color 0.4s ease;
+}
+
+/* Aktif Dairenin Rengi (Yeşil Bar ile Birleşmesi İçin) */
+.step-icon.active {
+  background-color: rgb(0, 205, 0);
+}
+
+/* İkon Daireleri */
+.step-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; 
+  /* Büyüme efektinin pürüzsüz ve havalı olması için transform animasyonu eklendi */
+  transition: background-color 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Aktif Dairenin Rengi ve 1. Resimdeki "ŞİŞKİNLİK" Efekti */
+.step-icon.active {
+  background-color: rgb(0, 205, 0);
+  transform: scale(1.4); /* Daireyi barın %40 dışına taşırarak büyütür */
+}
+
+/* SVG boyutunun büyümeden aşırı etkilenmemesi için ufak ayar */
+.step-icon svg {
+  width: 16px;
+  height: 16px;
+  transition: stroke 0.3s ease;
+}

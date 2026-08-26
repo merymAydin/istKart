@@ -20,6 +20,7 @@
 }
 
 /* Sol Sidebar */
+/* Sol Sidebar */
 .wallet-cards-sidebar {
   background: white;
   border: 1px solid #e2e8f0;
@@ -28,8 +29,48 @@
   box-shadow: 0 10px 30px rgba(0,0,0,0.02);
   height: fit-content;
 }
-.wallet-cards-sidebar h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #334155; }
 
+/* --- YENİ MODERN FİLTRE BAŞLIĞI VE DROPDOWN --- */
+.sidebar-filter-header {
+  display: flex;
+  justify-content: space-between; /* Başlığı sola, dropdown'u sağa atar */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-filter-header h3 { 
+  font-size: 1.2rem; 
+  font-weight: 700; 
+  color: #334155; 
+  margin: 0; /* Flex yapısı içinde kaymaması için margin'i sıfırladık */
+}
+
+/* Şık Filtre Butonu (Varsayılan çirkin ok gizlendi, özel ikon eklendi) */
+.modern-filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding-right: 20px; /* Ok ikonu için boşluk */
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  /* Özel şık ok ikonu (SVG) */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 16px;
+  transition: opacity 0.2s ease;
+}
+
+.modern-filter-select:hover {
+  opacity: 0.7;
+}
+
+/* --- BURADAN AŞAĞISI SENİN KODUN (HİÇ DOKUNULMADI) --- */
 .sidebar-cards-list {
   display: flex;
   flex-direction: column;

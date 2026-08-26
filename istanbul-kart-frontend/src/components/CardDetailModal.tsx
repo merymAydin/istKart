@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // 1. Yönlendirme için ekledik
 
 export interface Perk {
   name: string;
@@ -15,7 +16,7 @@ export interface CardData {
   description?: string;
   requirements?: string[];
   fee?: string;
-  perks?: Perk[]; // Eklendi
+  perks?: Perk[];
 }
 
 interface Props {
@@ -26,11 +27,26 @@ interface Props {
 
 const CardDetailModal: React.FC<Props> = ({ card, onClose, onApply }) => {
   const [mounted, setMounted] = useState(false);
+  const navigate = useNavigate(); // 2. Hook'u tanımladık
 
   useEffect(() => {
     setTimeout(() => setMounted(true), 50);
   }, [card]);
 
+  // 3. Butona tıklandığında çalışacak akıllı kontrol fonksiyonu
+const handleApplyClick = () => {
+    // Kart başlığını küçük harfe çevirip kontrol ediyoruz
+    const titleLower = card.title.toLowerCase();
+
+    // Eğer kartın adı "city card" içermiyorsa (yani indirimli, öğrenci, mavi kart vb. ise)
+    if (!titleLower.includes("city card")) {
+      onClose(); // Önce modal'ı kapat
+      navigate('/kyc'); // KYC formuna yönlendir
+    } else {
+      // Sadece Istanbul City Card ise cüzdana ekle
+      onApply();
+    }
+  };
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div 
@@ -63,7 +79,6 @@ const CardDetailModal: React.FC<Props> = ({ card, onClose, onApply }) => {
             </div>
           </div>
 
-          {/* EĞER PERKS (AVANTAJLAR VE İKONLAR) VARSA BURADA LİSTELENİR */}
           {card.perks && (
             <div className="cd-perks-section">
               <span className="cd-label">Included Perks & Areas</span>
@@ -82,7 +97,7 @@ const CardDetailModal: React.FC<Props> = ({ card, onClose, onApply }) => {
             <button 
               className="cd-apply-btn" 
               style={{ backgroundColor: card.themeColor }}
-              onClick={onApply}
+              onClick={handleApplyClick} // 4. Güncellenmiş akıllı fonksiyonu bağladık
             >
               Apply for a Card
             </button>

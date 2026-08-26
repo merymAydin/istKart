@@ -35,45 +35,58 @@ const Dashboard: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleApplyCard = async (card: CardItem) => {
-    if (isAdding) return;
-    setIsAdding(true);
-
-    try {
-      const mapCardTypeToEnum = (id: string) => {
-        const normalizedId = id.toUpperCase();
-        if (normalizedId.includes("REGULAR") || normalizedId === "REGULAR") return "NORMAL";
-        if (normalizedId.includes("DISCOUNT") || normalizedId === "DISCOUNTED") return "STUDENT";
-        if (normalizedId.includes("FREE") || normalizedId === "FREE") return "ELDERLY";
-        if (normalizedId === "YELLOW") return "YELLOW";
-        if (normalizedId === "PLUS") return "PLUS";
-        if (normalizedId === "BLUE" || normalizedId === "FACILITY") return "FACILITY";
-        if (normalizedId === "CITY") return "CITY";
-        return normalizedId;
-      };
-
-      const backendCardType = mapCardTypeToEnum(card.id);
-      const token = localStorage.getItem("token");
-      
-      const response = await fetch(`http://localhost:8080/api/cards/create?cardType=${backendCardType}`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.ok) {
-        setSelectedCard(null);
-        setSuccessCard(card);
-      } else {
-        const errorText = await response.text();
-        alert("Card couldn't be added: " + errorText);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Cannot connect to server.");
-    } finally {
-      setIsAdding(false);
-    }
+const handleApplyCard = async (card: CardItem) => {
+  // 1. Kart ID'sini backend Enum formatına çeviren fonksiyonumuz
+  const mapCardTypeToEnum = (id: string) => {
+    const normalizedId = id.toUpperCase();
+    if (normalizedId.includes("REGULAR") || normalizedId === "REGULAR") return "NORMAL";
+    if (normalizedId.includes("DISCOUNT") || normalizedId === "DISCOUNTED") return "STUDENT";
+    if (normalizedId.includes("FREE") || normalizedId === "FREE") return "ELDERLY";
+    if (normalizedId === "YELLOW") return "YELLOW";
+    if (normalizedId === "PLUS") return "PLUS";
+    if (normalizedId === "BLUE" || normalizedId === "FACILITY") return "FACILITY";
+    if (normalizedId === "CITY") return "CITY";
+    return normalizedId;
   };
+
+  const backendCardType = mapCardTypeToEnum(card.id);
+  const titleLower = card.title.toLowerCase();
+  
+  // 2. Eğer seçilen kart "Istanbul City Card" DEĞİLSE, KYC formuna kart tipiyle beraber yönlendir:
+  if (!titleLower.includes("city card")) {
+    setSelectedCard(null); 
+    
+    // İŞTE BURASI ÇOK ÖNEMLİ: state ile cardType'ı yolluyoruz!
+    navigate("/kyc", { state: { cardType: backendCardType } }); 
+    return; 
+  }
+
+  // 3. Eğer Istanbul City Card ise direkt ekleme mantığı çalışır:
+  if (isAdding) return;
+  setIsAdding(true);
+
+  try {
+    const token = localStorage.getItem("token");
+    
+    const response = await fetch(`http://localhost:8080/api/cards/create?cardType=${backendCardType}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.ok) {
+      setSelectedCard(null);
+      setSuccessCard(card);
+    } else {
+      const errorText = await response.text();
+      alert("Card couldn't be added: " + errorText);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Cannot connect to server.");
+  } finally {
+    setIsAdding(false);
+  }
+};
 
   return (
     <div className="dash-container">

@@ -43,10 +43,18 @@ const [isSpendOpen, setIsSpendOpen] = useState<boolean>(false);
   const [isAutoPaySettingsOpen, setIsAutoPaySettingsOpen] = useState<boolean>(false);
   const [autoPayThreshold, setAutoPayThreshold] = useState<string>("50");
   const [autoPayAmount, setAutoPayAmount] = useState<string>("100");
-
   
+  const [cardFilter, setCardFilter] = useState<string>("ALL");
+  const [kycStatus, setKycStatus] = useState<string[]>([]);
 
   const navigate = useNavigate();
+const isPending = kycStatus && kycStatus.length > 0;
+const isRejected = false;
+  const filteredCards = myCards.filter((card: UserCard) => {
+    if (cardFilter === "ACTIVE") return card.isActive;
+    if (cardFilter === "DEACTIVATED") return !card.isActive;
+    return true; 
+  });
 
   const fetchMyCards = useCallback(async () => {
     try {
@@ -65,6 +73,37 @@ const [isSpendOpen, setIsSpendOpen] = useState<boolean>(false);
       console.error("Failed to load cards:", error);
     } finally {
       setIsLoading(false);
+    }
+  }, []);
+
+const fetchKycStatus = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Kayıtlı olabilecek tüm olası localStorage anahtarlarını kontrol edelim
+      const username = localStorage.getItem("username") || 
+                       localStorage.getItem("userName") || 
+                       localStorage.getItem("name") || 
+                       localStorage.getItem("user");
+
+      if (!username) {
+        console.warn("Username not found, KYC sorgulanamıyor.");
+        return;
+      }
+
+      const response = await fetch(`http://localhost:8080/api/kyc/status/${username}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log("KYC Status Gelen Dizi:", data); 
+        setKycStatus(data);
+      } else {
+        console.error("KYC status isteği başarısız oldu, kod:", response.status);
+      }
+    } catch (error) {
+      console.error("Failed to load KYC status:", error);
     }
   }, []);
 
@@ -87,12 +126,14 @@ const [isSpendOpen, setIsSpendOpen] = useState<boolean>(false);
     }
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchMyCards();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTerminals();
-  }, [fetchMyCards, fetchTerminals]);
+    // BUNU EKLEDİK: Sayfa açıldığında KYC durumunu da çeksin
+    fetchKycStatus(); 
+  }, [fetchMyCards, fetchTerminals, fetchKycStatus]); // Bağımlılıklara da ekledik
 
   const handleSpendSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -234,14 +275,15 @@ const [isSpendOpen, setIsSpendOpen] = useState<boolean>(false);
     return "USER";
   };
 
-  const getCardVisuals = (type: string) => {
-    const normalizedId = type.toUpperCase();
+const getCardVisuals = (type: string) => {
+    const normalizedId = type ? type.toUpperCase() : "REGULAR";
     let cardId = "regular";
+    
     if (normalizedId.includes("REGULAR") || normalizedId === "NORMAL") cardId = "regular";
-    else if (normalizedId.includes("DISCOUNT") || normalizedId === "STUDENT") cardId = "discounted";
+    else if (normalizedId.includes("DISCOUNT") || normalizedId.includes("STUDENT") || normalizedId.includes("ÖĞRENCİ")) cardId = "discounted"; 
     else if (normalizedId.includes("FREE") || normalizedId === "YELLOW" || normalizedId === "ELDERLY") cardId = "free";
     else if (normalizedId === "PLUS") cardId = "plus";
-    else if (normalizedId === "BLUE" || normalizedId === "FACILITY") cardId = "blue";
+    else if (normalizedId === "BLUE" || normalizedId === "FACILITY") cardId = "blue"; // <-- İŞTE BURAYI EKLEDİK
     else if (normalizedId === "CITY") cardId = "city";
 
     return cardsData.find(c => c.id === cardId) || cardsData[0];
@@ -261,9 +303,11 @@ const [isSpendOpen, setIsSpendOpen] = useState<boolean>(false);
     normalizedType.includes("ÖĞRENCİ") || 
     normalizedType.includes("DISCOUNT") ||
     normalizedType.includes("İNDİRİMLİ");
+
+  const isRedCard = normalizedType === "NORMAL" || normalizedType.includes("REGULAR");
                            
   const hasActiveSubscription = (selectedCard?.subscriptionRights ?? 0) > 0;
-  const isSubscriptionDisabled = isYellowCard || hasActiveSubscription;
+  const isSubscriptionDisabled = isYellowCard || isRedCard || hasActiveSubscription;
 
   return (
     <div className="wallet-container">
@@ -276,7 +320,7 @@ const [isSpendOpen, setIsSpendOpen] = useState<boolean>(false);
         <p>Manage your portfolio, track balances and inspect card details.</p>
       </header>
 
-      {myCards.length === 0 ? (
+      {myCards.length === 0 && !isPending && !isRejected ? (
         <div className="wallet-empty">
           <p>You don't have any cards in your wallet yet.</p>
           <button onClick={() => navigate("/dashboard")} className="explore-btn">Explore & Get Cards</button>
@@ -285,16 +329,55 @@ const [isSpendOpen, setIsSpendOpen] = useState<boolean>(false);
         <div className="wallet-content-grid">
           
           <div className="wallet-cards-sidebar">
-            <h3>Active Cards ({myCards.length})</h3>
+            
+            {/* Şık Başlık ve Sağındaki Dropdown Filtre */}
+            <div className="sidebar-filter-header">
+              <h3>My Cards</h3>
+              <select 
+                className="modern-filter-select"
+                value={cardFilter} 
+                onChange={(e) => setCardFilter(e.target.value)}
+              >
+                <option value="ALL">All</option>
+                <option value="ACTIVE">Active</option>
+                <option value="DEACTIVATED">Inactive</option>
+                <option value="APPLIED">Pending</option>
+              </select>
+            </div>
+
             <div className="sidebar-cards-list">
-              {myCards.map((card) => {
+              {isPending && (cardFilter === "ALL" || cardFilter === "APPLIED") && (
+                kycStatus.map((pendingCardType, index) => {
+                  const visuals = getCardVisuals(pendingCardType); // Görseli ve ismi otomatik çeker
+                  return (
+                    <div 
+                      key={`pending-${index}`}
+                      className={`sidebar-card-item pending-item ${selectedCard === null ? "selected" : ""}`}
+                      onClick={() => setSelectedCard(null)}
+                      style={{ opacity: 0.7, filter: 'grayscale(40%)', borderLeftColor: visuals.themeColor }}
+                    >
+                      <img src={visuals.img} alt={`${visuals.title} Pending`} style={{ width: 40, opacity: 0.5 }} />
+                      <div className="sidebar-card-meta">
+                        <h4 className="pending-title">{visuals.title} Application</h4>
+                        <p className="pending-subtitle" style={{ color: '#ffc107', fontSize: '0.8rem' }}>REVIEW IN PROGRESS</p>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+
+              {filteredCards.map((card) => {
                 const visuals = getCardVisuals(card.cardType);
                 const isSelected = selectedCard?.id === card.id;
                 return (
                   <div 
                     key={card.id} 
                     className={`sidebar-card-item ${isSelected ? "selected" : ""}`}
-                    onClick={() => { setSelectedCard(card); setIsAutoPaySettingsOpen(false); }}
+                    onClick={() => { 
+                      setSelectedCard(card); 
+                      setIsAutoPaySettingsOpen(false); 
+                      setSpendCardNumber(card.cardNumber); 
+                    }}
                     style={{ borderLeftColor: visuals.themeColor }}
                   >
                     <img src={visuals.img} alt={visuals.title} />
