@@ -4,6 +4,8 @@ import "./Dashboard.css";
 import { cardsData } from "../data/cardsData";
 import walletVideo from "../assets/wallet.mp4";
 import Chatbot from "../components/Chatbot"; 
+import API_URL from "../services/api";
+
 
 interface PerkItem {
   name: string;
@@ -68,7 +70,7 @@ const handleApplyCard = async (card: CardItem) => {
   try {
     const token = localStorage.getItem("token");
     
-    const response = await fetch(`http://localhost:8080/api/cards/create?cardType=${backendCardType}`, {
+    const response = await fetch(`${API_URL}/api/cards/create?cardType=${backendCardType}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Turnstile } from '@marsidev/react-turnstile';
+import API_URL from "../services/api";
+
 
 interface RegisterFormProps {
   setIsLogin: (val: boolean) => void;
@@ -32,7 +34,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ setIsLogin }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/register', {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password, turnstileToken })

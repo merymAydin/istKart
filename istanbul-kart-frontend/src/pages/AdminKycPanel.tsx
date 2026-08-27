@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import './AdminKycPanel.css'; // Stil dosyamızı bağlıyoruz
+import './AdminKycPanel.css'; 
+import API_URL from '../services/api';
 
 interface KycApplication {
   id: number;
@@ -22,7 +23,7 @@ export default function AdminKycPanel() {
     const fetchPendingApps = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get<KycApplication[]>('http://localhost:8080/api/admin/kyc/pending', {
+        const res = await axios.get<KycApplication[]>(`${API_URL}/api/admin/kyc/pending`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setApplications(res.data);
@@ -43,7 +44,7 @@ export default function AdminKycPanel() {
   const handleApprove = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post(`http://localhost:8080/api/admin/kyc/${id}/approve`, {}, {
+      await axios.post(`${API_URL}/api/admin/kyc/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("Application approved and Istanbul Card created successfully!");
@@ -62,7 +63,7 @@ export default function AdminKycPanel() {
   const handleReject = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post(`http://localhost:8080/api/admin/kyc/${id}/reject`, {}, {
+      await axios.post(`${API_URL}/api/admin/kyc/${id}/reject`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("Application rejected.");

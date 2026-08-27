@@ -74,7 +74,7 @@ export default function KycForm({ username, firstName, lastName, cardType }: Kyc
     try {
       const token = localStorage.getItem("token");
 
-      await axios.post('http://localhost:8080/api/kyc/apply', data, {
+      await axios.post('{}/api/kyc/apply', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`

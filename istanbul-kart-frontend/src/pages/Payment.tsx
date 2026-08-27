@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import successVideo from "../assets/success-animation.mp4";
+import API_URL from "../services/api";
 
 const Payment: React.FC = () => {
   const navigate = useNavigate();
@@ -24,8 +25,7 @@ const Payment: React.FC = () => {
   const [cvc, setCvc] = useState("");
   const [istanbulCardNumber, setIstanbulCardNumber] = useState(location.state?.cardNumber || "");
 
-  useEffect(() => {
-    // Eğer cüzdandan kart bilgisi gelmediyse mecburen API'den çekiyoruz
+  useEffect(() => { 
     const fetchUserCard = async () => {
       if (location.state?.cardNumber && location.state?.cardType) return;
 
@@ -34,7 +34,7 @@ const Payment: React.FC = () => {
 
       try {
         const response = await fetch(
-          "http://localhost:8080/api/cards/my-card",
+          `${API_URL}/api/cards/my-card`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -96,7 +96,7 @@ const Payment: React.FC = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/api/payment/topup", {
+      const response = await fetch(`${API_URL}/api/payment/topup`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",

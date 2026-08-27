@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./History.css";
+import API_URL from "../services/api";
 
 interface Transaction {
   id: number;
@@ -28,8 +29,7 @@ useEffect(() => {
     const fetchHistory = async () => {
       try {
         const token = localStorage.getItem("token");
-        // Backend'deki endpoint'ine göre burayı düzenleyebilirsin
-        const response = await fetch(`http://localhost:8080/api/transactions/card/${cardNumber}`, {
+        const response = await fetch(`${API_URL}/api/transactions/card/${cardNumber}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Turnstile } from '@marsidev/react-turnstile';
+import API_URL from "../services/api";
 
 interface LoginFormProps {
   setIsLogin: (val: boolean) => void;
@@ -25,7 +26,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Chatbot.css";
+import API_URL from "../services/api";
 
 interface ChatMessage {
   sender: "user" | "bot";
@@ -25,7 +26,7 @@ const Chatbot: React.FC = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/api/chatbot/ask", {
+      const response = await fetch(`${API_URL}/api/chatbot/ask`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

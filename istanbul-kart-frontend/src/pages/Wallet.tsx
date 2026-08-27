@@ -7,6 +7,7 @@ import bus1Img from "../assets/bus1.png";
 import busVideo from "../assets/bus.mp4"; 
 import acceptVideo from "../assets/accept.mp4"; 
 import brokenCardVideo from "../assets/broken-card.mp4"; 
+import API_URL from "../services/api";
 
 interface UserCard {
   id: number;
@@ -59,7 +60,7 @@ const isRejected = false;
   const fetchMyCards = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/api/cards/my-cards", {
+      const response = await fetch(`${API_URL}/api/cards/my-cards`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -91,7 +92,7 @@ const fetchKycStatus = useCallback(async () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/api/kyc/status/${username}`, {
+      const response = await fetch(`${API_URL}/api/kyc/status/${username}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -110,7 +111,7 @@ const fetchKycStatus = useCallback(async () => {
   const fetchTerminals = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/api/terminals", {
+      const response = await fetch(`${API_URL}/api/terminals`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -131,7 +132,6 @@ useEffect(() => {
     fetchMyCards();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTerminals();
-    // BUNU EKLEDİK: Sayfa açıldığında KYC durumunu da çeksin
     fetchKycStatus(); 
   }, [fetchMyCards, fetchTerminals, fetchKycStatus]); // Bağımlılıklara da ekledik
 
@@ -144,7 +144,7 @@ useEffect(() => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:8080/api/cards/spend?cardNumber=${spendCardNumber}&terminalId=${terminalId}`, {
+      const response = await fetch(`${API_URL}/api/cards/spend?cardNumber=${spendCardNumber}&terminalId=${terminalId}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -179,7 +179,7 @@ useEffect(() => {
     
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:8080/api/cards/my-cards/${cardNumber}/deactivate`, {
+      const response = await fetch(`${API_URL}/api/cards/my-cards/${cardNumber}/deactivate`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -199,7 +199,7 @@ useEffect(() => {
   const executeAutoPayToggle = async (cardNumber: string, enable: boolean, threshold: number, amount: number) => {
     try {
       const token = localStorage.getItem("token");
-      let url = `http://localhost:8080/api/cards/auto-topup?cardNumber=${cardNumber}&enable=${enable}`;
+      let url = `${API_URL}/api/cards/auto-topup?cardNumber=${cardNumber}&enable=${enable}`;
       if (enable) {
         url += `&threshold=${threshold}&amount=${amount}`;
       }
