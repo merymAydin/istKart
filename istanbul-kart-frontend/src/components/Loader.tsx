@@ -7,25 +7,25 @@ const Loader = () => {
       <div className="loader">
         <div className="bar" />
         <div className="check-bar-container">
-          {/* 1. Adım - Artık boş değil, tik işareti var */}
+          
           <div className="check">
             <svg stroke="white" strokeWidth={2} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m4.5 12.75 6 6 9-13.5" strokeLinejoin="round" strokeLinecap="round" />
             </svg>
           </div>
-          {/* 2. Adım */}
+
+           <div className="check">
+            <svg stroke="white" strokeWidth={2} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="m4.5 12.75 6 6 9-13.5" strokeLinejoin="round" strokeLinecap="round" />
+            </svg>
+          </div>
+
           <div className="check">
             <svg stroke="white" strokeWidth={2} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m4.5 12.75 6 6 9-13.5" strokeLinejoin="round" strokeLinecap="round" />
             </svg>
           </div>
-          {/* 3. Adım */}
-          <div className="check">
-            <svg stroke="white" strokeWidth={2} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="m4.5 12.75 6 6 9-13.5" strokeLinejoin="round" strokeLinecap="round" />
-            </svg>
-          </div>
-          {/* 4. Adım */}
+
           <div className="check">
             <svg stroke="white" strokeWidth={2} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m4.5 12.75 6 6 9-13.5" strokeLinejoin="round" strokeLinecap="round" />

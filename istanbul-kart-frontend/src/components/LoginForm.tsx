@@ -34,7 +34,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setIsLogin }) => {
         body: JSON.stringify({
           username,
           password,
-          turnstileToken // Eğer backend token'ı bekliyorsa buraya eklenir
+          turnstileToken  
         }),
       });
 

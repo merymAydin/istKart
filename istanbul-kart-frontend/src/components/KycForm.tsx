@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './KycForm.css';
 import Loader from './Loader';
+import API_URL from '../services/api';
 
 interface KycFormProps {
   username: string;
@@ -74,7 +75,7 @@ export default function KycForm({ username, firstName, lastName, cardType }: Kyc
     try {
       const token = localStorage.getItem("token");
 
-      await axios.post('{}/api/kyc/apply', data, {
+      await axios.post(`${API_URL}/api/kyc/apply`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`

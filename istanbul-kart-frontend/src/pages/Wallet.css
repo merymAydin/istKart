@@ -976,3 +976,277 @@ div::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   border-radius: 8px;
   border: 1px dashed #f87171;
 }
+ 
+
+/* =========================================
+   MOBİL CÜZDAN (RESPONSIVE DİKEY / YATAY)
+   ========================================= */
+@media (max-width: 900px) {
+
+  .wallet-container {
+    padding: 16px !important;
+    min-height: 100vh;
+  }
+
+  .wallet-header {
+    margin-bottom: 20px !important;
+  }
+
+  .wallet-header h1 {
+    font-size: 1.8rem !important;
+    margin-bottom: 4px;
+  }
+
+  .wallet-header p {
+    font-size: 0.9rem !important;
+  }
+
+  .wallet-content-grid {
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .wallet-cards-sidebar {
+    padding: 16px !important;
+  }
+
+  .panel-inner {
+    padding: 16px !important;
+  }
+
+  /* 
+    DİKEY MODDA (TELEFON DÜZ): Alt alta dizilsin ki taşma olmasın.
+    YATAY MODDA (TELEFON YAN): Genişlik kurtardığı için yan yana (`row`) olsun.
+  */
+  .wallet-detail-layout {
+    flex-direction: column !important; /* Dikeyde alt alta */
+    gap: 20px !important;
+    align-items: center !important;
+  }
+
+  .wallet-card-column {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .wallet-stats-column {
+    width: 100% !important;
+    min-width: 0;
+  }
+
+  /* Kart genişliği dikey ekranda tam otursun */
+  .realistic-card-widget {
+    width: 100% !important;
+    max-width: 350px !important;
+    height: 200px !important;
+    margin: 0 auto !important;
+  }
+
+  .realistic-card-widget .rc-content {
+    padding: 20px !important;
+  }
+
+  .rc-middle .rc-amount {
+    font-size: 32px !important;
+  }
+
+  .rc-number {
+    font-size: 14px !important;
+    letter-spacing: 1.5px !important;
+  }
+
+  .rc-holder {
+    font-size: 13px !important;
+  }
+
+  /* Butonlar tam genişlikte ve düzgün görünsün */
+  .action-button-row {
+    height: 48px !important;
+  }
+
+  .rc-btn {
+    height: 48px !important;
+    padding: 10px !important;
+    font-size: 14px !important;
+  }
+
+  .panel-stats-grid {
+    padding: 16px !important;
+    grid-template-columns: 1fr !important; /* Dikeyde tek sütun istatistik */
+    gap: 12px !important;
+  }
+
+  .stat-card {
+    padding: 16px !important;
+  }
+
+  .stat-card h2 {
+    font-size: 1.5rem !important;
+  }
+}
+
+
+/* =========================================
+   MOBİL CÜZDAN (RESPONSIVE DİKEY / YATAY)
+   ========================================= */
+@media (max-width: 900px) {
+
+  .wallet-container {
+    padding: 16px !important;
+    min-height: 100vh;
+  }
+
+  .wallet-header {
+    margin-bottom: 20px !important;
+  }
+
+  .wallet-header h1 {
+    font-size: 1.8rem !important;
+    margin-bottom: 4px;
+  }
+
+  .wallet-header p {
+    font-size: 0.9rem !important;
+  }
+
+  .wallet-content-grid {
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .wallet-cards-sidebar {
+    padding: 16px !important;
+  }
+
+  .panel-inner {
+    padding: 16px !important;
+  }
+
+  /* 
+    DİKEY MODDA (TELEFON DÜZ): Alt alta dizilsin ki taşma olmasın.
+    YATAY MODDA (TELEFON YAN): Genişlik kurtardığı için yan yana (`row`) olsun.
+  */
+  .wallet-detail-layout {
+    flex-direction: column !important; /* Dikeyde alt alta */
+    gap: 20px !important;
+    align-items: center !important;
+  }
+
+  .wallet-card-column {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .wallet-stats-column {
+    width: 100% !important;
+    min-width: 0;
+  }
+
+  /* Kart genişliği dikey ekranda tam otursun */
+  .realistic-card-widget {
+    width: 100% !important;
+    max-width: 350px !important;
+    height: 200px !important;
+    margin: 0 auto !important;
+  }
+
+  .realistic-card-widget .rc-content {
+    padding: 20px !important;
+  }
+
+  .rc-middle .rc-amount {
+    font-size: 32px !important;
+  }
+
+  .rc-number {
+    font-size: 14px !important;
+    letter-spacing: 1.5px !important;
+  }
+
+  .rc-holder {
+    font-size: 13px !important;
+  }
+
+  /* Butonlar tam genişlikte ve düzgün görünsün */
+  .action-button-row {
+    height: 48px !important;
+  }
+
+  .rc-btn {
+    height: 48px !important;
+    padding: 10px !important;
+    font-size: 14px !important;
+  }
+
+  .panel-stats-grid {
+    padding: 16px !important;
+    grid-template-columns: 1fr !important; /* Dikeyde tek sütun istatistik */
+    gap: 12px !important;
+  }
+
+  .stat-card {
+    padding: 16px !important;
+  }
+
+  .stat-card h2 {
+    font-size: 1.5rem !important;
+  }
+}
+
+
+
+@media (max-width: 900px) {
+  .wallet-container {
+    padding: 20px 14px !important;
+  }
+
+  /* Sol liste ve sağ paneli alt alta koy */
+  .wallet-content-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+
+  .wallet-cards-sidebar {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .wallet-card-details-panel {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .panel-inner {
+    padding: 16px !important;
+  }
+
+  /* Kart ve istatistikleri alt alta diz */
+  .wallet-detail-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+
+  .wallet-card-column,
+  .wallet-stats-column {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+  }
+
+  .realistic-card-widget {
+    width: 100% !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
+  }
+
+  .action-buttons-stack {
+    width: 100% !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
+  }
+}

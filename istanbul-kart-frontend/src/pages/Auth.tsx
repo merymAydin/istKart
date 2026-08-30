@@ -67,7 +67,7 @@ const Auth: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // YENİ: Başvur butonuna tıklanınca çalışacak fonksiyon
+
   const handleApplyClick = () => {
     setSelectedCard(null); // Modalı kapat
     setIsLogin(true); // Giriş formunu aktif et
@@ -88,7 +88,7 @@ const Auth: React.FC = () => {
         <div className="left-presentation">
           <div className="presentation-content">
             <h1 className="glow-text">Istanbulkart <br/>Digital Hub</h1>
-            <p className="glow-subtext">Manage your passes, check your balance, and explore the city effortlessly.</p>
+            <p className="glow-subtext">Manage your passes, check your balance and explore the city effortlessly.</p>
             <div className="flying-cards-source">
               {heroCards.map((img, i) => (
                 <div key={i} ref={el => { anchorRefs.current[i] = el; }} className={`fly-card-anchor card-pos-${i}`}>
@@ -101,7 +101,6 @@ const Auth: React.FC = () => {
         <div className="right-login">
           <div className="form-container" style={{ position: 'relative' }}>
             
-            {/* YENİ: Uyarı Mesajı Baloncuğu */}
             {warningMsg && (
               <div className="warning-toast">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -118,7 +117,6 @@ const Auth: React.FC = () => {
         <CardsGrid onCardClick={setSelectedCard} slotRefs={slotRefs} boxRefs={boxRefs} />
       </div>
 
-      {/* YENİ: Modal bileşenine yönlendirme fonksiyonunu gönderiyoruz */}
       {selectedCard && (
         <CardDetailModal 
           card={selectedCard} 
